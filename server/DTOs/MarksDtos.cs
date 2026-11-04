@@ -17,7 +17,7 @@ public class MarkEntryItemDto
     public int EnrollmentId { get; set; }
 
     [Required]
-    [Range(0, 1000, ErrorMessage = "Marks must be 0 or greater")]
+    [Range(0, double.MaxValue, ErrorMessage = "Marks must be 0 or greater")]
     public decimal MarksObtained { get; set; }
 }
 

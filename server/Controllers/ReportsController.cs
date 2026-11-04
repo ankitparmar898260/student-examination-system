@@ -310,6 +310,7 @@ public class ReportsController : ControllerBase
                 SubjectName = es.Subject.SubjectName,
                 HighestMarks = highest,
                 AverageMarks = average,
+                FailedCount = failed,
                 FailedStudentsCount = failed,
                 TotalEvaluatedCount = marks.Count
             });

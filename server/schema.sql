@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS StudentMarks (
   MarkId         INT AUTO_INCREMENT PRIMARY KEY,
   EnrollmentId   INT            NOT NULL,
   SubjectId      INT            NOT NULL,
-  MarksObtained  DECIMAL(5,2)   NOT NULL,
+  MarksObtained  DECIMAL(8,2)   NOT NULL,
   CONSTRAINT fk_marks_enrollment FOREIGN KEY (EnrollmentId)
     REFERENCES StudentExamEnrollments(EnrollmentId) ON DELETE CASCADE,
   CONSTRAINT fk_marks_subject FOREIGN KEY (SubjectId)

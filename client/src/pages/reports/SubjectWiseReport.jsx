@@ -108,7 +108,7 @@ export default function SubjectWiseReport() {
       label: "Unsuccessful Count",
       align: "center",
       render: (row) => {
-        const count = row.failedCount ?? 0;
+        const count = row.failedCount ?? row.failedStudentsCount ?? 0;
         return (
           <span
             className={`inline-flex items-center gap-1 font-mono text-xs font-semibold px-2.5 py-0.5 rounded-lg border ${

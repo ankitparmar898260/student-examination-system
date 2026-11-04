@@ -151,6 +151,16 @@ public class ExamsController : ControllerBase
         if (exam == null)
             return NotFound(new { message = $"Exam with ID {id} not found." });
 
+        // Validate that all subject IDs exist
+        var existingSubjectCount = await _context.Subjects
+            .Where(s => dto.SubjectIds.Contains(s.SubjectId))
+            .CountAsync();
+
+        if (existingSubjectCount != dto.SubjectIds.Distinct().Count())
+        {
+            return BadRequest(new { message = "One or more selected subjects do not exist." });
+        }
+
         exam.ExamName = dto.ExamName.Trim();
         exam.AcademicYear = dto.AcademicYear.Trim();
 

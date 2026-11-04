@@ -18,7 +18,7 @@ public class StudentMark
     public int SubjectId { get; set; }
 
     [Required]
-    [Column(TypeName = "decimal(5,2)")]
+    [Column(TypeName = "decimal(8,2)")]
     public decimal MarksObtained { get; set; }
 
     // Foreign Keys

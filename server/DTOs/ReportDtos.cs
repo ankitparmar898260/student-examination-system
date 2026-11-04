@@ -70,7 +70,12 @@ public class SubjectWiseReportDto
     public string SubjectName { get; set; } = string.Empty;
     public decimal HighestMarks { get; set; }
     public decimal AverageMarks { get; set; }
-    public int FailedStudentsCount { get; set; }
+    public int FailedCount { get; set; }
+    public int FailedStudentsCount
+    {
+        get => FailedCount;
+        set => FailedCount = value;
+    }
     public int TotalEvaluatedCount { get; set; }
 }
 
