@@ -10,7 +10,7 @@ import DataTable from "../components/ui/DataTable";
 import Modal from "../components/ui/Modal";
 import FormInput from "../components/ui/FormInput";
 import AlertMessage from "../components/ui/AlertMessage";
-import { Plus, Pencil, BookOpen } from "lucide-react";
+import { Plus, Pencil, BookOpen, FileText } from "lucide-react";
 
 export default function Exams() {
   const [exams, setExams] = useState([]);
@@ -166,41 +166,43 @@ export default function Exams() {
     {
       key: "examName",
       label: "Exam Name",
-      render: (row) => <span className="font-semibold text-slate-900">{row.examName}</span>,
+      render: (row) => <span className="font-semibold text-slate-900 text-sm">{row.examName}</span>,
     },
     {
       key: "academicYear",
       label: "Academic Year",
       render: (row) => (
-        <span className="font-mono text-xs text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+        <span className="font-mono text-xs font-medium text-slate-800 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
           {row.academicYear}
         </span>
       ),
     },
     {
       key: "subjectCount",
-      label: "Subjects",
+      label: "Assigned Subjects",
       align: "center",
       render: (row) => (
-        <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
-          <BookOpen className="w-3 h-3 text-indigo-500" />
+        <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+          <BookOpen className="w-3.5 h-3.5 text-blue-600" />
           <span>{row.subjectCount ?? (row.subjectIds ? row.subjectIds.length : "-")} Subjects</span>
         </span>
       ),
     },
     {
       key: "actions",
-      label: "Act",
+      label: "Actions",
       align: "center",
       render: (row) => (
-        <button
-          type="button"
-          onClick={() => openEditModal(row)}
-          className="p-1.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
-          title="Edit Exam"
-        >
-          <Pencil className="w-3.5 h-3.5" />
-        </button>
+        <div className="flex items-center justify-center">
+          <button
+            type="button"
+            onClick={() => openEditModal(row)}
+            className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 border border-transparent hover:border-blue-200 rounded-lg transition-colors cursor-pointer"
+            title="Edit Exam"
+          >
+            <Pencil className="w-3.5 h-3.5" />
+          </button>
+        </div>
       ),
     },
   ];
@@ -216,18 +218,23 @@ export default function Exams() {
         />
       )}
 
-      {/* Header */}
+      {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Examinations Master</h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Configure examination schedules and mapped subjects (No deletion allowed)
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center text-blue-600 shrink-0">
+            <FileText className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-slate-900 tracking-tight">Examinations Master</h2>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Examination schedules and mapped course curricula (No deletion permitted)
+            </p>
+          </div>
         </div>
         <button
           type="button"
           onClick={openAddModal}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg transition-colors shadow-xs cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-xl transition-all shadow-xs hover:shadow cursor-pointer self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           <span>Add Exam</span>
@@ -238,7 +245,7 @@ export default function Exams() {
       <DataTable
         columns={columns}
         data={exams}
-        emptyMessage="No examination sessions registered yet. Click '+ Add Exam' to create one."
+        emptyMessage="Click '+ Add Exam' above to schedule an examination session."
         loading={loading}
       />
 
@@ -288,7 +295,7 @@ export default function Exams() {
                       key={subId}
                       className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors ${
                         isChecked
-                          ? "bg-indigo-50/70 text-indigo-900 border border-indigo-200/80"
+                          ? "bg-blue-50 text-blue-900 border border-blue-200"
                           : "hover:bg-white text-slate-800"
                       }`}
                     >
@@ -297,7 +304,7 @@ export default function Exams() {
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => handleSubjectToggle(subId)}
-                          className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                          className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                         />
                         <span className="text-xs font-semibold">
                           {sub.subjectName}
@@ -320,14 +327,14 @@ export default function Exams() {
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-xl transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
             >
               {submitting ? "Saving..." : "Save Exam"}
             </button>

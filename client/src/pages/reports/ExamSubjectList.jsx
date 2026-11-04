@@ -75,7 +75,7 @@ export default function ExamSubjectList() {
       key: "subjectCode",
       label: "Subject Code",
       render: (row) => (
-        <span className="font-mono text-xs font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+        <span className="font-mono text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">
           {row.subjectCode}
         </span>
       ),
@@ -96,7 +96,7 @@ export default function ExamSubjectList() {
       label: "Pass Marks",
       align: "center",
       render: (row) => (
-        <span className="font-mono font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+        <span className="font-mono font-medium text-[#16A34A] bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200">
           {row.passMarks}
         </span>
       ),
@@ -123,7 +123,7 @@ export default function ExamSubjectList() {
       </div>
 
       {/* Filter Card */}
-      <div className="mb-5 bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs flex items-center max-w-md">
+      <div className="mb-5 bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center max-w-md">
         <FilterDropdown
           label="Examination"
           value={selectedExamId}

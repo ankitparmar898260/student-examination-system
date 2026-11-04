@@ -111,28 +111,28 @@ export default function ExamResult() {
       render: (row) => {
         if (row.rank === 1) {
           return (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-bold bg-amber-50 text-amber-900 border border-amber-300">
               <Trophy className="w-3 h-3 text-amber-600" />
               <span>Rank 1</span>
             </span>
           );
         } else if (row.rank === 2) {
           return (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300">
               <Medal className="w-3 h-3 text-slate-500" />
               <span>Rank 2</span>
             </span>
           );
         } else if (row.rank === 3) {
           return (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-900 border border-orange-300">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-bold bg-orange-50 text-orange-900 border border-orange-300">
               <Award className="w-3 h-3 text-orange-600" />
               <span>Rank 3</span>
             </span>
           );
         } else if (row.rank) {
           return (
-            <span className="font-mono font-bold text-xs text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
+            <span className="font-mono font-bold text-xs text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
               #{row.rank}
             </span>
           );
@@ -145,7 +145,7 @@ export default function ExamResult() {
       key: "rollNumber",
       label: "Roll No",
       render: (row) => (
-        <span className="font-mono text-xs font-medium text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+        <span className="font-mono text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">
           {row.rollNumber}
         </span>
       ),
@@ -233,7 +233,7 @@ export default function ExamResult() {
       </div>
 
       {/* Filter Card */}
-      <div className="mb-5 bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs flex items-center max-w-md">
+      <div className="mb-5 bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center max-w-md">
         <FilterDropdown
           label="Examination"
           value={selectedExamId}

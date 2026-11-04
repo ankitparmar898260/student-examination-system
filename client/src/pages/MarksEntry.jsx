@@ -269,7 +269,7 @@ export default function MarksEntry() {
           type="button"
           onClick={handleSaveAll}
           disabled={saving || marksData.length === 0 || hasAnyErrors}
-          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-xl transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer self-start sm:self-auto"
         >
           <Save className="w-4 h-4" />
           <span>{saving ? "Saving..." : "Save All Marks"}</span>
@@ -277,7 +277,7 @@ export default function MarksEntry() {
       </div>
 
       {/* Selectors Bar */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs mb-6">
+      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs mb-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <SelectInput
             label="Examination Session"
@@ -303,15 +303,15 @@ export default function MarksEntry() {
         {currentSubject && (
           <div className="mt-4 pt-3.5 border-t border-slate-100 flex flex-wrap items-center justify-between text-xs text-slate-600 gap-3">
             <div className="flex items-center gap-2">
-              <Layers className="w-4 h-4 text-indigo-600" />
+              <Layers className="w-4 h-4 text-blue-600" />
               <span className="font-semibold text-slate-800">{currentSubject.subjectName}</span>
-              <span className="font-mono text-slate-400">({currentSubject.subjectCode})</span>
+              <span className="font-mono text-slate-500">({currentSubject.subjectCode})</span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md font-medium">
+              <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-lg font-medium border border-slate-200">
                 Max Marks: <strong className="text-slate-900 font-mono">{maxMarks}</strong>
               </span>
-              <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-md font-medium">
+              <span className="bg-emerald-50 text-[#16A34A] border border-emerald-200 px-3 py-1 rounded-lg font-medium">
                 Passing Cutoff: <strong className="font-mono">{currentSubject.passMarks}</strong>
               </span>
             </div>
@@ -320,7 +320,7 @@ export default function MarksEntry() {
       </div>
 
       {/* Marks Grid Container */}
-      <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs">
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
         {loadingMarks ? (
           <div className="py-16">
             <Loader size="md" />
@@ -334,7 +334,7 @@ export default function MarksEntry() {
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-slate-200 text-sm">
-              <thead className="bg-slate-50/80">
+              <thead className="bg-[#F8FAFC]">
                 <tr>
                   <th className="px-4 py-3 text-left font-semibold text-slate-600 text-xs uppercase tracking-wider">
                     Roll No
@@ -358,10 +358,10 @@ export default function MarksEntry() {
                   return (
                     <tr
                       key={row.enrollmentId}
-                      className="hover:bg-slate-50/60 transition-colors"
+                      className="hover:bg-blue-50/25 transition-colors"
                     >
                       <td className="px-4 py-3.5 text-slate-900 font-mono text-xs">
-                        <span className="bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                        <span className="font-mono text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">
                           {row.rollNumber}
                         </span>
                       </td>
@@ -378,10 +378,10 @@ export default function MarksEntry() {
                           onChange={(e) =>
                             handleMarkChange(row.enrollmentId, e.target.value)
                           }
-                          className={`w-32 px-3 py-1.5 text-sm font-mono rounded-lg border transition-all focus:outline-none ${
+                          className={`w-32 px-3 py-1.5 text-sm font-mono rounded-xl border transition-all focus:outline-none ${
                             hasError
                               ? "border-rose-400 bg-rose-50/40 text-rose-900 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20"
-                              : "border-slate-300 bg-white text-slate-900 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/15"
+                              : "border-slate-200 bg-white text-slate-900 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/15"
                           }`}
                           placeholder="0.00"
                         />
@@ -393,7 +393,7 @@ export default function MarksEntry() {
                             <span>{errorMsg}</span>
                           </span>
                         ) : row.marksObtained !== "" ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium">
+                          <span className="inline-flex items-center gap-1 text-xs text-[#16A34A] font-medium">
                             <CheckCircle className="w-3.5 h-3.5 shrink-0" />
                             <span>Valid Entry</span>
                           </span>

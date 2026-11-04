@@ -10,7 +10,7 @@ import Modal from "../components/ui/Modal";
 import FormInput from "../components/ui/FormInput";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
 import AlertMessage from "../components/ui/AlertMessage";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Users } from "lucide-react";
 
 export default function Students() {
   const [students, setStudents] = useState([]);
@@ -164,40 +164,40 @@ export default function Students() {
       key: "rollNumber",
       label: "Roll No",
       render: (row) => (
-        <span className="font-mono font-medium text-xs text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+        <span className="font-mono font-semibold text-xs text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200">
           {row.rollNumber}
         </span>
       ),
     },
     {
       key: "fullName",
-      label: "Full Name",
-      render: (row) => <span className="font-semibold text-slate-900">{row.fullName}</span>,
+      label: "Candidate Full Name",
+      render: (row) => <span className="font-semibold text-[#0F172A] text-sm">{row.fullName}</span>,
     },
     {
       key: "email",
-      label: "Email",
-      render: (row) => <span className="text-slate-600 text-xs">{row.email}</span>,
+      label: "Email Address",
+      render: (row) => <span className="text-slate-500 text-xs font-normal">{row.email}</span>,
     },
     {
       key: "department",
-      label: "Dept",
+      label: "Department",
       render: (row) => (
-        <span className="inline-flex items-center text-xs font-medium text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full">
+        <span className="inline-flex items-center text-xs font-medium text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200">
           {row.department}
         </span>
       ),
     },
     {
       key: "actions",
-      label: "Act",
+      label: "Actions",
       align: "center",
       render: (row) => (
         <div className="flex items-center justify-center gap-1.5">
           <button
             type="button"
             onClick={() => openEditModal(row)}
-            className="p-1.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 border border-transparent hover:border-blue-200 rounded-lg transition-colors cursor-pointer"
             title="Edit Student"
           >
             <Pencil className="w-3.5 h-3.5" />
@@ -205,7 +205,7 @@ export default function Students() {
           <button
             type="button"
             onClick={() => setConfirmDeleteId(row.studentId || row.id)}
-            className="p-1.5 text-slate-600 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 rounded-lg transition-colors cursor-pointer"
             title="Delete Student"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -226,18 +226,23 @@ export default function Students() {
         />
       )}
 
-      {/* Header */}
+      {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Students Directory</h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Manage student registrations, departments, and enrollment credentials
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center text-blue-600 shrink-0">
+            <Users className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-[#0F172A] tracking-tight">Students Directory</h2>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Candidate records, academic departments, and enrollment profiles
+            </p>
+          </div>
         </div>
         <button
           type="button"
           onClick={openAddModal}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg transition-colors shadow-xs cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-xl transition-all shadow-xs hover:shadow cursor-pointer self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           <span>Add Student</span>
@@ -248,7 +253,7 @@ export default function Students() {
       <DataTable
         columns={columns}
         data={students}
-        emptyMessage="No students found. Click '+ Add Student' to register your first record."
+        emptyMessage="Click '+ Add Student' above to register your first candidate."
         loading={loading}
       />
 
@@ -256,7 +261,7 @@ export default function Students() {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={editingStudent ? "Edit Student Details" : "Register New Student"}
+        title={editingStudent ? "Edit Student Record" : "Register New Student"}
         size="md"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -302,14 +307,14 @@ export default function Students() {
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
             >
               {submitting ? "Saving..." : "Save Student"}
             </button>
@@ -322,7 +327,7 @@ export default function Students() {
         isOpen={Boolean(confirmDeleteId)}
         onCancel={() => setConfirmDeleteId(null)}
         onConfirm={handleDeleteConfirm}
-        message="Are you sure you want to delete this student record? All related enrollments and marks records may also be affected."
+        message="Are you sure you want to delete this student record? This action will permanently remove this candidate."
         confirmLabel="Delete Student"
       />
     </div>

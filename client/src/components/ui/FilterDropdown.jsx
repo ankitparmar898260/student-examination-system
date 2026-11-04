@@ -18,7 +18,7 @@ export default function FilterDropdown({
       <select
         value={value ?? ""}
         onChange={(e) => onChange(e.target.value)}
-        className="px-3 py-1.5 text-xs font-medium bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/15 focus:border-indigo-600 text-slate-800 transition-all shadow-2xs cursor-pointer"
+        className="px-3 py-1.5 text-xs font-medium bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600/15 focus:border-blue-600 text-[#0F172A] transition-all shadow-2xs cursor-pointer"
       >
         {options.map((opt, idx) => (
           <option key={opt.key ?? opt.value ?? idx} value={opt.value}>

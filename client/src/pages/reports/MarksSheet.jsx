@@ -169,10 +169,10 @@ export default function MarksSheet() {
         </div>
       ) : marksSheetData ? (
         <PrintWrapper buttonLabel="Print Official Marksheet">
-          <div className="bg-white border-2 border-slate-300 rounded-2xl p-8 sm:p-10 shadow-sm max-w-3xl mx-auto print:border-none print:shadow-none print:p-0">
+          <div className="bg-white border border-slate-200 rounded-2xl p-8 sm:p-10 shadow-xs max-w-3xl mx-auto print:border-none print:shadow-none print:p-0">
             {/* Institution Letterhead Header */}
             <div className="border-b-2 border-slate-900 pb-5 mb-6 text-center">
-              <div className="inline-flex items-center justify-center h-12 w-12 rounded-xl bg-slate-900 text-white mb-2 shadow-xs">
+              <div className="inline-flex items-center justify-center h-12 w-12 rounded-xl bg-blue-600 text-white mb-2 shadow-xs">
                 <GraduationCap className="w-6 h-6" />
               </div>
               <h2 className="text-lg font-bold uppercase tracking-wider text-slate-900">
@@ -197,7 +197,7 @@ export default function MarksSheet() {
                 <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] block mb-0.5">
                   Roll Number
                 </span>
-                <span className="font-mono font-bold text-slate-900 text-sm">
+                <span className="font-mono font-bold text-blue-700 text-sm">
                   {marksSheetData.rollNumber}
                 </span>
               </div>
@@ -222,7 +222,7 @@ export default function MarksSheet() {
             {/* Subject Marks Table */}
             <div className="border border-slate-200 rounded-xl overflow-hidden mb-6">
               <table className="min-w-full divide-y divide-slate-200 text-sm">
-                <thead className="bg-slate-100/90 text-slate-700 font-semibold text-xs uppercase tracking-wider">
+                <thead className="bg-[#F8FAFC] text-slate-700 font-semibold text-xs uppercase tracking-wider">
                   <tr>
                     <th className="px-4 py-3 text-left">Subject Syllabus</th>
                     <th className="px-4 py-3 text-center">Max Marks</th>
@@ -247,7 +247,7 @@ export default function MarksSheet() {
                         : "Fail";
 
                       return (
-                        <tr key={idx} className="hover:bg-slate-50/50">
+                        <tr key={idx} className="hover:bg-blue-50/25">
                           <td className="px-4 py-3 font-medium text-slate-900">
                             {sub.subjectName}
                           </td>
@@ -274,13 +274,13 @@ export default function MarksSheet() {
                     </tr>
                   )}
                   {/* Aggregated Totals Row */}
-                  <tr className="bg-slate-100/90 font-bold border-t-2 border-slate-300 text-slate-900">
+                  <tr className="bg-slate-50 font-bold border-t-2 border-slate-200 text-slate-900">
                     <td className="px-4 py-3.5 uppercase tracking-wider text-xs">Total Aggregate</td>
                     <td className="px-4 py-3.5 text-center font-mono">
                       {marksSheetData.totalMaxMarks ?? "-"}
                     </td>
                     <td className="px-4 py-3.5 text-center text-slate-400 font-mono">-</td>
-                    <td className="px-4 py-3.5 text-center font-mono text-base text-indigo-700">
+                    <td className="px-4 py-3.5 text-center font-mono text-base text-blue-600">
                       {marksSheetData.totalObtained ?? "-"}
                     </td>
                     <td className="px-4 py-3.5 text-center text-slate-400 font-mono">-</td>

@@ -27,10 +27,10 @@ export default function SelectInput({
         value={value ?? ""}
         onChange={onChange}
         disabled={disabled}
-        className={`w-full px-3.5 py-2.5 text-sm rounded-lg border transition-all duration-150 focus:outline-none ${
+        className={`w-full px-3.5 py-2.5 text-sm rounded-xl border transition-all duration-150 focus:outline-none ${
           error
             ? "border-rose-400 bg-rose-50/30 text-rose-900 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20"
-            : "border-slate-300 bg-white text-slate-900 hover:border-slate-400 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/15"
+            : "border-slate-200 bg-white text-[#0F172A] hover:border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/15"
         } ${disabled ? "bg-slate-100 cursor-not-allowed text-slate-400 border-slate-200" : ""}`}
       >
         {options.map((opt, index) => (

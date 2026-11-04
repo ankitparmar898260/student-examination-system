@@ -9,10 +9,10 @@ export default function DataTable({
   loading = false,
 }) {
   return (
-    <div className="w-full overflow-hidden bg-white rounded-xl border border-slate-200/90 shadow-xs">
+    <div className="w-full overflow-hidden bg-white rounded-xl border border-slate-200 shadow-xs">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-          <thead className="bg-slate-50/90">
+          <thead className="bg-[#F8FAFC] border-b border-slate-200">
             <tr>
               {columns.map((col, idx) => (
                 <th
@@ -35,7 +35,7 @@ export default function DataTable({
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="px-4 py-12 text-center text-slate-500"
+                  className="px-4 py-16 text-center text-slate-500"
                 >
                   <Loader size="md" />
                 </td>
@@ -44,7 +44,7 @@ export default function DataTable({
               data.map((row, rowIdx) => (
                 <tr
                   key={row.id ?? row.studentId ?? row.subjectId ?? row.examId ?? row.enrollmentId ?? rowIdx}
-                  className="hover:bg-slate-50/80 transition-colors group"
+                  className="hover:bg-blue-50/30 transition-colors even:bg-slate-50/30 group"
                 >
                   {columns.map((col, colIdx) => (
                     <td
@@ -66,11 +66,14 @@ export default function DataTable({
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="px-4 py-12 text-center"
+                  className="px-4 py-16 text-center"
                 >
                   <div className="flex flex-col items-center justify-center text-slate-400">
-                    <Inbox className="w-8 h-8 mb-2 stroke-[1.5] text-slate-300" />
-                    <p className="text-sm font-medium text-slate-600">{emptyMessage}</p>
+                    <div className="h-12 w-12 rounded-xl bg-slate-100 flex items-center justify-center mb-3 text-slate-400">
+                      <Inbox className="w-6 h-6 stroke-[1.5]" />
+                    </div>
+                    <p className="text-sm font-semibold text-slate-700 mb-0.5">No Records Found</p>
+                    <p className="text-xs text-slate-400 max-w-sm">{emptyMessage}</p>
                   </div>
                 </td>
               </tr>

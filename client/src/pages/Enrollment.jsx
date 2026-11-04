@@ -158,7 +158,7 @@ export default function Enrollment() {
           checked={allAvailableChecked}
           onChange={handleSelectAllAvailable}
           disabled={availableStudents.length === 0}
-          className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+          className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
         />
       ),
       align: "center",
@@ -169,7 +169,7 @@ export default function Enrollment() {
             type="checkbox"
             checked={selectedStudentIds.includes(id)}
             onChange={() => handleToggleStudent(id)}
-            className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+            className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
           />
         );
       },
@@ -178,7 +178,7 @@ export default function Enrollment() {
       key: "rollNumber",
       label: "Roll No",
       render: (row) => (
-        <span className="font-mono text-xs font-medium text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+        <span className="font-mono text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">
           {row.rollNumber}
         </span>
       ),
@@ -204,7 +204,7 @@ export default function Enrollment() {
       key: "rollNumber",
       label: "Roll No",
       render: (row) => (
-        <span className="font-mono text-xs font-medium text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+        <span className="font-mono text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">
           {row.rollNumber}
         </span>
       ),
@@ -245,7 +245,7 @@ export default function Enrollment() {
       </div>
 
       {/* Select Exam Filter Card */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs mb-6 max-w-md">
+      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs mb-6 max-w-md">
         <SelectInput
           label="Target Examination Session"
           name="examId"
@@ -259,10 +259,10 @@ export default function Enrollment() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Available Students Box */}
-        <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex flex-col">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex flex-col">
           <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <UserPlus className="w-4 h-4 text-indigo-600" />
+              <UserPlus className="w-4 h-4 text-blue-600" />
               <h3 className="text-sm font-bold text-slate-900">
                 Eligible to Enroll ({availableStudents.length})
               </h3>
@@ -271,7 +271,7 @@ export default function Enrollment() {
               type="button"
               onClick={handleEnrollSelected}
               disabled={submitting || selectedStudentIds.length === 0}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-xl transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               <UserCheck className="w-3.5 h-3.5" />
               <span>
@@ -297,15 +297,15 @@ export default function Enrollment() {
         </div>
 
         {/* Already Enrolled Box */}
-        <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex flex-col">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex flex-col">
           <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-emerald-600" />
+              <Users className="w-4 h-4 text-[#16A34A]" />
               <h3 className="text-sm font-bold text-slate-900">
                 Currently Enrolled ({enrolledStudents.length})
               </h3>
             </div>
-            <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+            <span className="text-[11px] font-semibold text-[#16A34A] bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
               Active Roster
             </span>
           </div>

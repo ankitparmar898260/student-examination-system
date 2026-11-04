@@ -10,7 +10,7 @@ import Modal from "../components/ui/Modal";
 import FormInput from "../components/ui/FormInput";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
 import AlertMessage from "../components/ui/AlertMessage";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, BookOpen } from "lucide-react";
 
 export default function Subjects() {
   const [subjects, setSubjects] = useState([]);
@@ -183,28 +183,28 @@ export default function Subjects() {
       key: "subjectCode",
       label: "Subject Code",
       render: (row) => (
-        <span className="font-mono font-medium text-xs text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+        <span className="font-mono font-semibold text-xs text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200">
           {row.subjectCode}
         </span>
       ),
     },
     {
       key: "subjectName",
-      label: "Subject Name",
-      render: (row) => <span className="font-semibold text-slate-900">{row.subjectName}</span>,
+      label: "Course Title",
+      render: (row) => <span className="font-semibold text-[#0F172A] text-sm">{row.subjectName}</span>,
     },
     {
       key: "maxMarks",
       label: "Max Marks",
       align: "center",
-      render: (row) => <span className="font-mono text-slate-800 font-medium">{row.maxMarks}</span>,
+      render: (row) => <span className="font-mono text-slate-800 font-semibold text-sm">{row.maxMarks}</span>,
     },
     {
       key: "passMarks",
       label: "Pass Marks",
       align: "center",
       render: (row) => (
-        <span className="font-mono text-emerald-700 font-medium bg-emerald-50/60 px-2 py-0.5 rounded border border-emerald-200">
+        <span className="font-mono text-emerald-700 font-bold bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 text-xs">
           {row.passMarks}
         </span>
       ),
@@ -218,7 +218,7 @@ export default function Subjects() {
           <button
             type="button"
             onClick={() => openEditModal(row)}
-            className="p-1.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 border border-transparent hover:border-blue-200 rounded-lg transition-colors cursor-pointer"
             title="Edit Subject"
           >
             <Pencil className="w-3.5 h-3.5" />
@@ -226,7 +226,7 @@ export default function Subjects() {
           <button
             type="button"
             onClick={() => setConfirmDeleteId(row.subjectId || row.id)}
-            className="p-1.5 text-slate-600 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 rounded-lg transition-colors cursor-pointer"
             title="Delete Subject"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -247,18 +247,23 @@ export default function Subjects() {
         />
       )}
 
-      {/* Header */}
+      {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Subjects Master</h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Define course modules, maximum scoring benchmarks and passing cutoffs
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center text-blue-600 shrink-0">
+            <BookOpen className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-[#0F172A] tracking-tight">Subjects Master</h2>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Course curriculum, maximum scoring benchmarks and passing cutoffs
+            </p>
+          </div>
         </div>
         <button
           type="button"
           onClick={openAddModal}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg transition-colors shadow-xs cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-xl transition-all shadow-xs hover:shadow cursor-pointer self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           <span>Add Subject</span>
@@ -269,7 +274,7 @@ export default function Subjects() {
       <DataTable
         columns={columns}
         data={subjects}
-        emptyMessage="No subjects found. Click '+ Add Subject' to add one."
+        emptyMessage="Click '+ Add Subject' above to create course syllabus."
         loading={loading}
       />
 
@@ -329,14 +334,14 @@ export default function Subjects() {
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting || hasPassMarksError}
-              className="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {submitting ? "Saving..." : "Save Subject"}
             </button>
@@ -349,7 +354,7 @@ export default function Subjects() {
         isOpen={Boolean(confirmDeleteId)}
         onCancel={() => setConfirmDeleteId(null)}
         onConfirm={handleDeleteConfirm}
-        message="Are you sure you want to delete this subject? Exams and marks dependent on this subject will be removed."
+        message="Are you sure you want to delete this subject? Exams and marks dependent on this subject will be affected."
         confirmLabel="Delete Subject"
       />
     </div>

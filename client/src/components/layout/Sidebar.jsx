@@ -36,18 +36,18 @@ export default function Sidebar() {
   ];
 
   const getNavLinkClass = ({ isActive }) =>
-    `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+    `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all ${
       isActive
-        ? "bg-indigo-600 text-white shadow-xs"
-        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
+        ? "bg-blue-600 text-white font-semibold shadow-xs"
+        : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60"
     }`;
 
   return (
-    <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col h-screen sticky top-0 shrink-0 no-print">
+    <aside className="w-64 bg-[#0F172A] border-r border-slate-800/80 flex flex-col h-screen sticky top-0 shrink-0 no-print">
       {/* Brand Header */}
-      <div className="h-16 flex items-center px-5 border-b border-slate-800/80 bg-slate-950/40">
+      <div className="h-16 flex items-center px-5 border-b border-slate-800/80 bg-[#0B1120]">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-xs shadow-indigo-500/20">
+          <div className="h-9 w-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-xs">
             <GraduationCap className="w-5 h-5" />
           </div>
           <div>
@@ -55,14 +55,14 @@ export default function Sidebar() {
               ExamSystem
             </h1>
             <p className="text-[11px] text-slate-400 mt-1 font-medium">
-              Academic Portal
+              Academic SaaS Portal
             </p>
           </div>
         </div>
       </div>
 
       {/* Navigation Links */}
-      <div className="flex-1 overflow-y-auto px-3.5 py-5 space-y-6">
+      <div className="flex-1 overflow-y-auto sidebar-scroll px-3.5 py-5 space-y-6">
         {/* DATA ENTRY Section */}
         <div>
           <h2 className="px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
@@ -100,13 +100,13 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Footer info */}
-      <div className="p-3.5 border-t border-slate-800/80 bg-slate-950/20 text-[11px] text-slate-400 flex items-center justify-between">
-        <span className="flex items-center gap-1.5 font-medium">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      {/* Footer Info */}
+      <div className="p-3.5 border-t border-slate-800/80 bg-[#0B1120] text-[11px] text-slate-400 flex items-center justify-between">
+        <span className="flex items-center gap-1.5 font-medium text-emerald-400">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
           System Online
         </span>
-        <span className="text-slate-400 font-mono">v1.0</span>
+        <span className="text-slate-500 font-mono text-[10px]">v1.0</span>
       </div>
     </aside>
   );

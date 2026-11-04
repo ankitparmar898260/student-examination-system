@@ -15,7 +15,7 @@ export default function PrintWrapper({
         <button
           type="button"
           onClick={handlePrint}
-          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors shadow-xs cursor-pointer hover:border-slate-400"
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-xs cursor-pointer hover:border-slate-300"
         >
           <Printer className="w-4 h-4 text-slate-500" />
           <span>{buttonLabel}</span>

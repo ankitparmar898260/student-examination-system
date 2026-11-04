@@ -58,7 +58,7 @@ export default function StudentListReport() {
       key: "rollNumber",
       label: "Roll No",
       render: (row) => (
-        <span className="font-mono text-xs font-medium text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+        <span className="font-mono text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">
           {row.rollNumber}
         </span>
       ),
@@ -77,7 +77,7 @@ export default function StudentListReport() {
       key: "department",
       label: "Department",
       render: (row) => (
-        <span className="text-xs font-medium text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full">
+        <span className="text-xs font-medium text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-lg border border-slate-200">
           {row.department}
         </span>
       ),
@@ -104,7 +104,7 @@ export default function StudentListReport() {
       </div>
 
       {/* Filter Toolbar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-5 bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-5 bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
         <FilterDropdown
           label="Department"
           value={department}

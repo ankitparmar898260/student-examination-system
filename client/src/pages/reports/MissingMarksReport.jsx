@@ -77,7 +77,7 @@ export default function MissingMarksReport() {
       key: "rollNumber",
       label: "Roll No",
       render: (row) => (
-        <span className="font-mono text-xs font-medium text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+        <span className="font-mono text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">
           {row.rollNumber}
         </span>
       ),
@@ -91,7 +91,7 @@ export default function MissingMarksReport() {
       key: "subjectName",
       label: "Pending Subject Evaluation",
       render: (row) => (
-        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/90">
+        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
           <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
           <span>{row.subjectName}</span>
         </span>
@@ -121,7 +121,7 @@ export default function MissingMarksReport() {
       </div>
 
       {/* Filter Card */}
-      <div className="mb-5 bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs flex items-center max-w-md">
+      <div className="mb-5 bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center max-w-md">
         <FilterDropdown
           label="Examination"
           value={selectedExamId}
