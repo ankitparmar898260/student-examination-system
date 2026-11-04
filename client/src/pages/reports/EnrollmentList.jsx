@@ -64,7 +64,7 @@ export default function EnrollmentList() {
   }, [selectedExamId]);
 
   const examOptions = [
-    { value: "", label: "-- Select Exam --" },
+    { value: "", label: "-- Select Examination --" },
     ...exams.map((ex) => ({
       value: String(ex.examId || ex.id),
       label: `${ex.examName} (${ex.academicYear})`,
@@ -72,10 +72,34 @@ export default function EnrollmentList() {
   ];
 
   const columns = [
-    { key: "rollNumber", label: "Roll No" },
-    { key: "fullName", label: "Full Name" },
-    { key: "email", label: "Email" },
-    { key: "department", label: "Department" },
+    {
+      key: "rollNumber",
+      label: "Roll No",
+      render: (row) => (
+        <span className="font-mono text-xs font-medium text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+          {row.rollNumber}
+        </span>
+      ),
+    },
+    {
+      key: "fullName",
+      label: "Candidate Name",
+      render: (row) => <span className="font-semibold text-slate-900">{row.fullName}</span>,
+    },
+    {
+      key: "email",
+      label: "Email Address",
+      render: (row) => <span className="text-xs text-slate-600">{row.email}</span>,
+    },
+    {
+      key: "department",
+      label: "Department",
+      render: (row) => (
+        <span className="text-xs font-medium text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full">
+          {row.department}
+        </span>
+      ),
+    },
   ];
 
   return (
@@ -91,18 +115,18 @@ export default function EnrollmentList() {
 
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-900">
-          Exam-wise Enrollment List
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+          Exam-wise Enrollment Roster
         </h2>
-        <p className="text-xs text-gray-500">
-          View all students enrolled in a specific examination
+        <p className="text-xs text-slate-500 mt-0.5">
+          Complete candidate roster registered for the selected examination
         </p>
       </div>
 
-      {/* Filter */}
-      <div className="mb-5 bg-white p-4 rounded-lg border border-gray-200 flex items-center">
+      {/* Filter Card */}
+      <div className="mb-5 bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs flex items-center max-w-md">
         <FilterDropdown
-          label="Select Exam"
+          label="Examination"
           value={selectedExamId}
           onChange={(val) => setSelectedExamId(val)}
           options={examOptions}
@@ -115,8 +139,8 @@ export default function EnrollmentList() {
         data={enrollments}
         emptyMessage={
           selectedExamId
-            ? "No students enrolled in this exam."
-            : "Please select an exam to view enrolled students."
+            ? "No candidates enrolled in this examination."
+            : "Please select an examination to view enrolled candidates."
         }
         loading={loadingData || loadingExams}
       />

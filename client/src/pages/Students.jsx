@@ -10,6 +10,7 @@ import Modal from "../components/ui/Modal";
 import FormInput from "../components/ui/FormInput";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
 import AlertMessage from "../components/ui/AlertMessage";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 
 export default function Students() {
   const [students, setStudents] = useState([]);
@@ -25,8 +26,6 @@ export default function Students() {
   const [alert, setAlert] = useState(null);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-
-  // Confirm delete dialog state
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   const fetchStudentsList = async () => {
@@ -39,7 +38,7 @@ export default function Students() {
         type: "error",
         message:
           err.response?.data?.message ||
-          "Failed to load students. Make sure backend is running.",
+          "Failed to load students. Make sure backend is running on http://localhost:5000.",
       });
     } finally {
       setLoading(false);
@@ -116,10 +115,10 @@ export default function Students() {
       if (editingStudent) {
         const id = editingStudent.studentId || editingStudent.id;
         await updateStudent(id, form);
-        setAlert({ type: "success", message: "Student updated successfully!" });
+        setAlert({ type: "success", message: "Student record updated successfully!" });
       } else {
         await addStudent(form);
-        setAlert({ type: "success", message: "Student added successfully!" });
+        setAlert({ type: "success", message: "Student record added successfully!" });
       }
       setIsModalOpen(false);
       resetForm();
@@ -161,33 +160,55 @@ export default function Students() {
   };
 
   const columns = [
-    { key: "rollNumber", label: "Roll No" },
-    { key: "fullName", label: "Full Name" },
-    { key: "email", label: "Email" },
-    { key: "department", label: "Dept" },
+    {
+      key: "rollNumber",
+      label: "Roll No",
+      render: (row) => (
+        <span className="font-mono font-medium text-xs text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+          {row.rollNumber}
+        </span>
+      ),
+    },
+    {
+      key: "fullName",
+      label: "Full Name",
+      render: (row) => <span className="font-semibold text-slate-900">{row.fullName}</span>,
+    },
+    {
+      key: "email",
+      label: "Email",
+      render: (row) => <span className="text-slate-600 text-xs">{row.email}</span>,
+    },
+    {
+      key: "department",
+      label: "Dept",
+      render: (row) => (
+        <span className="inline-flex items-center text-xs font-medium text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full">
+          {row.department}
+        </span>
+      ),
+    },
     {
       key: "actions",
       label: "Act",
       align: "center",
       render: (row) => (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-1.5">
           <button
             type="button"
             onClick={() => openEditModal(row)}
-            className="p-1 text-blue-600 hover:text-blue-800 rounded transition-colors"
-            title="Edit"
+            className="p-1.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+            title="Edit Student"
           >
-            ✏️
+            <Pencil className="w-3.5 h-3.5" />
           </button>
           <button
             type="button"
-            onClick={() =>
-              setConfirmDeleteId(row.studentId || row.id)
-            }
-            className="p-1 text-red-600 hover:text-red-800 rounded transition-colors"
-            title="Delete"
+            onClick={() => setConfirmDeleteId(row.studentId || row.id)}
+            className="p-1.5 text-slate-600 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+            title="Delete Student"
           >
-            🗑️
+            <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
       ),
@@ -205,18 +226,21 @@ export default function Students() {
         />
       )}
 
-      {/* Top Header */}
-      <div className="flex items-center justify-between mb-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Students</h2>
-          <p className="text-xs text-gray-500">Manage student records and details</p>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Students Directory</h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Manage student registrations, departments, and enrollment credentials
+          </p>
         </div>
         <button
           type="button"
           onClick={openAddModal}
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition-colors shadow-sm"
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg transition-colors shadow-xs cursor-pointer self-start sm:self-auto"
         >
-          + Add Student
+          <Plus className="w-4 h-4" />
+          <span>Add Student</span>
         </button>
       </div>
 
@@ -224,7 +248,7 @@ export default function Students() {
       <DataTable
         columns={columns}
         data={students}
-        emptyMessage="No students found. Click '+ Add Student' to create one!"
+        emptyMessage="No students found. Click '+ Add Student' to register your first record."
         loading={loading}
       />
 
@@ -232,17 +256,17 @@ export default function Students() {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={editingStudent ? "Edit Student" : "Add Student"}
+        title={editingStudent ? "Edit Student Details" : "Register New Student"}
         size="md"
       >
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <FormInput
             label="Roll Number"
             name="rollNumber"
             value={form.rollNumber}
             onChange={handleInputChange}
             error={errors.rollNumber}
-            placeholder="e.g. CS001"
+            placeholder="e.g. CS2026-001"
             required
           />
           <FormInput
@@ -251,17 +275,17 @@ export default function Students() {
             value={form.fullName}
             onChange={handleInputChange}
             error={errors.fullName}
-            placeholder="e.g. Rahul Kumar"
+            placeholder="e.g. Rahul Sharma"
             required
           />
           <FormInput
-            label="Email"
+            label="Email Address"
             name="email"
             type="email"
             value={form.email}
             onChange={handleInputChange}
             error={errors.email}
-            placeholder="e.g. rahul@example.com"
+            placeholder="e.g. rahul.sharma@example.com"
             required
           />
           <FormInput
@@ -270,24 +294,24 @@ export default function Students() {
             value={form.department}
             onChange={handleInputChange}
             error={errors.department}
-            placeholder="e.g. CS, IT, ME"
+            placeholder="e.g. Computer Science"
             required
           />
 
-          <div className="flex justify-end gap-3 mt-6 pt-3 border-t border-gray-200">
+          <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-100">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-200 hover:bg-gray-300 rounded transition-colors"
+              className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition-colors disabled:opacity-50"
+              className="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
             >
-              {submitting ? "Saving..." : "Save"}
+              {submitting ? "Saving..." : "Save Student"}
             </button>
           </div>
         </form>
@@ -298,8 +322,8 @@ export default function Students() {
         isOpen={Boolean(confirmDeleteId)}
         onCancel={() => setConfirmDeleteId(null)}
         onConfirm={handleDeleteConfirm}
-        message="Are you sure you want to delete this student record? This action cannot be undone."
-        confirmLabel="Delete"
+        message="Are you sure you want to delete this student record? All related enrollments and marks records may also be affected."
+        confirmLabel="Delete Student"
       />
     </div>
   );

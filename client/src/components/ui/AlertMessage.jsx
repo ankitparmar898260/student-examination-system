@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { CheckCircle2, AlertCircle, X } from "lucide-react";
 
 export default function AlertMessage({ type = "success", message, onClose }) {
   useEffect(() => {
@@ -15,27 +16,29 @@ export default function AlertMessage({ type = "success", message, onClose }) {
 
   return (
     <div
-      className={`mb-4 flex items-center justify-between p-3.5 rounded border text-sm transition-all ${
+      className={`mb-5 flex items-center justify-between p-3.5 rounded-xl border text-sm transition-all shadow-xs ${
         isSuccess
-          ? "bg-green-100 text-green-800 border-green-300"
-          : "bg-red-100 text-red-800 border-red-300"
+          ? "bg-emerald-50 text-emerald-900 border-emerald-200/90"
+          : "bg-rose-50 text-rose-900 border-rose-200/90"
       }`}
       role="alert"
     >
-      <div className="flex items-center gap-2">
-        <span className="font-bold text-base leading-none">
-          {isSuccess ? "✓" : "✕"}
-        </span>
-        <span className="font-medium">{message}</span>
+      <div className="flex items-center gap-2.5">
+        {isSuccess ? (
+          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+        ) : (
+          <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+        )}
+        <span className="font-medium text-xs leading-relaxed">{message}</span>
       </div>
       {onClose && (
         <button
           type="button"
           onClick={onClose}
-          className="text-xs font-semibold px-2 py-0.5 rounded hover:bg-black/10 transition-colors"
+          className="p-1 rounded-md hover:bg-black/5 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
           aria-label="Dismiss"
         >
-          ✕
+          <X className="w-4 h-4" />
         </button>
       )}
     </div>

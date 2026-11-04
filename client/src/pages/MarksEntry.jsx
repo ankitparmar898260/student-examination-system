@@ -4,6 +4,7 @@ import { getMarks, saveMarksBulk } from "../api/marks";
 import SelectInput from "../components/ui/SelectInput";
 import AlertMessage from "../components/ui/AlertMessage";
 import Loader from "../components/ui/Loader";
+import { Save, CheckCircle, AlertTriangle, BookOpen, Layers } from "lucide-react";
 
 export default function MarksEntry() {
   const [exams, setExams] = useState([]);
@@ -20,7 +21,6 @@ export default function MarksEntry() {
   const [saving, setSaving] = useState(false);
   const [alert, setAlert] = useState(null);
 
-  // Load Exams on mount
   useEffect(() => {
     const fetchExams = async () => {
       setLoadingExams(true);
@@ -45,7 +45,6 @@ export default function MarksEntry() {
     fetchExams();
   }, []);
 
-  // When Exam changes -> fetch subjects for this exam
   useEffect(() => {
     const fetchSubjects = async () => {
       if (!selectedExamId) {
@@ -85,7 +84,6 @@ export default function MarksEntry() {
     fetchSubjects();
   }, [selectedExamId]);
 
-  // When Subject changes -> fetch marks grid
   useEffect(() => {
     const fetchMarksGrid = async () => {
       if (!selectedExamId || !selectedSubjectId) {
@@ -104,7 +102,6 @@ export default function MarksEntry() {
       try {
         const res = await getMarks(selectedExamId, selectedSubjectId);
         const raw = res.data || [];
-        // Raw: [{ enrollmentId, studentId, rollNumber, fullName, marksObtained }]
         setMarksData(
           raw.map((item) => ({
             enrollmentId: item.enrollmentId,
@@ -143,7 +140,6 @@ export default function MarksEntry() {
       )
     );
 
-    // Validate this row
     const num = parseFloat(val);
     const newErrors = { ...rowErrors };
 
@@ -152,7 +148,7 @@ export default function MarksEntry() {
     } else if (isNaN(num)) {
       newErrors[enrollmentId] = "Must be a valid number";
     } else if (num < 0 || num > maxMarks) {
-      newErrors[enrollmentId] = `Marks must be between 0 and ${maxMarks}`;
+      newErrors[enrollmentId] = `Must be between 0 and ${maxMarks}`;
     } else {
       delete newErrors[enrollmentId];
     }
@@ -172,7 +168,7 @@ export default function MarksEntry() {
       } else if (isNaN(num)) {
         newErrors[row.enrollmentId] = "Must be a valid number";
       } else if (num < 0 || num > maxMarks) {
-        newErrors[row.enrollmentId] = `Marks must be between 0 and ${maxMarks}`;
+        newErrors[row.enrollmentId] = `Must be between 0 and ${maxMarks}`;
       }
     });
 
@@ -192,7 +188,7 @@ export default function MarksEntry() {
     if (marksData.length === 0) {
       setAlert({
         type: "error",
-        message: "No students enrolled to save marks for.",
+        message: "No candidates enrolled to record marks for.",
       });
       return;
     }
@@ -200,7 +196,7 @@ export default function MarksEntry() {
     if (!validateAllRows()) {
       setAlert({
         type: "error",
-        message: "Please correct the highlighted errors before saving.",
+        message: "Please correct highlighted input errors before submitting.",
       });
       return;
     }
@@ -219,7 +215,7 @@ export default function MarksEntry() {
       await saveMarksBulk(payload);
       setAlert({
         type: "success",
-        message: "All marks saved successfully!",
+        message: "Marks batch successfully updated & saved!",
       });
     } catch (err) {
       setAlert({
@@ -232,7 +228,7 @@ export default function MarksEntry() {
   };
 
   const examOptions = [
-    { value: "", label: "-- Select Exam --" },
+    { value: "", label: "-- Select Examination --" },
     ...exams.map((ex) => ({
       value: String(ex.examId || ex.id),
       label: `${ex.examName} (${ex.academicYear})`,
@@ -240,10 +236,10 @@ export default function MarksEntry() {
   ];
 
   const subjectOptions = [
-    { value: "", label: "-- Select Subject --" },
+    { value: "", label: "-- Select Course Subject --" },
     ...examSubjects.map((sub) => ({
       value: String(sub.subjectId || sub.id),
-      label: `${sub.subjectName} (Max: ${sub.maxMarks})`,
+      label: `${sub.subjectName} (${sub.subjectCode})`,
     })),
   ];
 
@@ -261,91 +257,100 @@ export default function MarksEntry() {
       )}
 
       {/* Header */}
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-900">Marks Entry</h2>
-        <p className="text-xs text-gray-500">
-          Enter and update marks for enrolled students subject-wise
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Marks Entry Evaluation</h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Tabulate and record subject-wise scores with instant range check and bulk commit
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleSaveAll}
+          disabled={saving || marksData.length === 0 || hasAnyErrors}
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer self-start sm:self-auto"
+        >
+          <Save className="w-4 h-4" />
+          <span>{saving ? "Saving..." : "Save All Marks"}</span>
+        </button>
       </div>
 
-      {/* Filters */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mb-6">
-        <SelectInput
-          label="Select Exam"
-          name="examId"
-          value={selectedExamId}
-          onChange={(e) => setSelectedExamId(e.target.value)}
-          options={examOptions}
-          disabled={loadingExams}
-          required
-        />
-        <SelectInput
-          label="Select Subject"
-          name="subjectId"
-          value={selectedSubjectId}
-          onChange={(e) => setSelectedSubjectId(e.target.value)}
-          options={subjectOptions}
-          disabled={loadingSubjects || !selectedExamId}
-          required
-        />
+      {/* Selectors Bar */}
+      <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <SelectInput
+            label="Examination Session"
+            name="examId"
+            value={selectedExamId}
+            onChange={(e) => setSelectedExamId(e.target.value)}
+            options={examOptions}
+            disabled={loadingExams}
+            required
+          />
+          <SelectInput
+            label="Evaluation Subject"
+            name="subjectId"
+            value={selectedSubjectId}
+            onChange={(e) => setSelectedSubjectId(e.target.value)}
+            options={subjectOptions}
+            disabled={loadingSubjects || !selectedExamId}
+            required
+          />
+        </div>
+
+        {/* Benchmarks Banner */}
+        {currentSubject && (
+          <div className="mt-4 pt-3.5 border-t border-slate-100 flex flex-wrap items-center justify-between text-xs text-slate-600 gap-3">
+            <div className="flex items-center gap-2">
+              <Layers className="w-4 h-4 text-indigo-600" />
+              <span className="font-semibold text-slate-800">{currentSubject.subjectName}</span>
+              <span className="font-mono text-slate-400">({currentSubject.subjectCode})</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md font-medium">
+                Max Marks: <strong className="text-slate-900 font-mono">{maxMarks}</strong>
+              </span>
+              <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-md font-medium">
+                Passing Cutoff: <strong className="font-mono">{currentSubject.passMarks}</strong>
+              </span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Marks Grid Container */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow-xs">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="text-base font-semibold text-gray-900">
-              Marks Grid
-            </h3>
-            {currentSubject && (
-              <span className="text-xs text-gray-500">
-                Max Marks: <strong className="text-gray-800">{maxMarks}</strong> | Pass Marks:{" "}
-                <strong className="text-gray-800">{currentSubject.passMarks}</strong>
-              </span>
-            )}
-          </div>
-
-          <button
-            type="button"
-            onClick={handleSaveAll}
-            disabled={saving || marksData.length === 0 || hasAnyErrors}
-            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
-          >
-            <span>💾</span>
-            <span>{saving ? "Saving..." : "Save All Marks"}</span>
-          </button>
-        </div>
-
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs">
         {loadingMarks ? (
-          <div className="py-12">
+          <div className="py-16">
             <Loader size="md" />
           </div>
         ) : marksData.length === 0 ? (
-          <div className="text-center py-10 text-gray-500 text-sm">
+          <div className="text-center py-12 text-slate-400 text-sm">
             {!selectedExamId || !selectedSubjectId
-              ? "Please select both Exam and Subject to load students."
-              : "No enrolled students found for this exam."}
+              ? "Select an examination and course subject above to load enrolled candidates."
+              : "No candidates enrolled in this examination yet."}
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-slate-200 text-sm">
+              <thead className="bg-slate-50/80">
                 <tr>
-                  <th className="px-4 py-3 text-left font-semibold text-gray-700 text-xs uppercase">
+                  <th className="px-4 py-3 text-left font-semibold text-slate-600 text-xs uppercase tracking-wider">
                     Roll No
                   </th>
-                  <th className="px-4 py-3 text-left font-semibold text-gray-700 text-xs uppercase">
-                    Full Name
+                  <th className="px-4 py-3 text-left font-semibold text-slate-600 text-xs uppercase tracking-wider">
+                    Candidate Full Name
                   </th>
-                  <th className="px-4 py-3 text-left font-semibold text-gray-700 text-xs uppercase w-48">
-                    Marks (0-{maxMarks})
+                  <th className="px-4 py-3 text-left font-semibold text-slate-600 text-xs uppercase tracking-wider w-56">
+                    Marks Obtained (0–{maxMarks})
                   </th>
-                  <th className="px-4 py-3 text-left font-semibold text-gray-700 text-xs uppercase">
-                    Status
+                  <th className="px-4 py-3 text-left font-semibold text-slate-600 text-xs uppercase tracking-wider">
+                    Validation Status
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-slate-100 bg-white">
                 {marksData.map((row) => {
                   const errorMsg = rowErrors[row.enrollmentId];
                   const hasError = Boolean(errorMsg);
@@ -353,15 +358,17 @@ export default function MarksEntry() {
                   return (
                     <tr
                       key={row.enrollmentId}
-                      className="even:bg-gray-50 hover:bg-gray-100 transition-colors"
+                      className="hover:bg-slate-50/60 transition-colors"
                     >
-                      <td className="px-4 py-3 text-gray-900 font-mono text-xs">
-                        {row.rollNumber}
+                      <td className="px-4 py-3.5 text-slate-900 font-mono text-xs">
+                        <span className="bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                          {row.rollNumber}
+                        </span>
                       </td>
-                      <td className="px-4 py-3 text-gray-900 font-medium">
+                      <td className="px-4 py-3.5 text-slate-900 font-semibold">
                         {row.fullName}
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-2.5">
                         <input
                           type="number"
                           step="0.01"
@@ -371,25 +378,27 @@ export default function MarksEntry() {
                           onChange={(e) =>
                             handleMarkChange(row.enrollmentId, e.target.value)
                           }
-                          className={`w-28 px-3 py-1.5 text-sm rounded border focus:outline-none focus:ring-1 ${
+                          className={`w-32 px-3 py-1.5 text-sm font-mono rounded-lg border transition-all focus:outline-none ${
                             hasError
-                              ? "border-red-500 bg-red-50 text-red-900 focus:ring-red-500"
-                              : "border-gray-300 bg-white text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                              ? "border-rose-400 bg-rose-50/40 text-rose-900 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20"
+                              : "border-slate-300 bg-white text-slate-900 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/15"
                           }`}
                           placeholder="0.00"
                         />
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-2.5">
                         {hasError ? (
-                          <span className="text-xs text-red-600 font-medium flex items-center gap-1">
-                            ⚠️ {errorMsg}
+                          <span className="inline-flex items-center gap-1 text-xs text-rose-600 font-medium">
+                            <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                            <span>{errorMsg}</span>
                           </span>
                         ) : row.marksObtained !== "" ? (
-                          <span className="text-xs text-green-600 font-medium">
-                            ✓ Valid
+                          <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium">
+                            <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>Valid Entry</span>
                           </span>
                         ) : (
-                          <span className="text-xs text-gray-400">Pending</span>
+                          <span className="text-xs text-slate-400 font-medium">Pending Entry</span>
                         )}
                       </td>
                     </tr>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Search, X } from "lucide-react";
 
 export default function SearchInput({
   value = "",
@@ -7,12 +8,10 @@ export default function SearchInput({
 }) {
   const [localValue, setLocalValue] = useState(value);
 
-  // Keep in sync with incoming value
   useEffect(() => {
     setLocalValue(value);
   }, [value]);
 
-  // Debounce 300ms
   useEffect(() => {
     const handler = setTimeout(() => {
       if (localValue !== value) {
@@ -25,15 +24,13 @@ export default function SearchInput({
 
   return (
     <div className="relative w-full max-w-xs">
-      <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400 text-sm">
-        🔍
-      </span>
+      <Search className="absolute inset-y-0 left-3 my-auto w-4 h-4 text-slate-400 pointer-events-none" />
       <input
         type="text"
         value={localValue}
         onChange={(e) => setLocalValue(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-9 pr-3 py-2 text-sm bg-white border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+        className="w-full pl-9 pr-8 py-2 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/15 focus:border-indigo-600 text-slate-900 placeholder:text-slate-400 transition-all shadow-2xs"
       />
       {localValue && (
         <button
@@ -42,10 +39,10 @@ export default function SearchInput({
             setLocalValue("");
             onChange("");
           }}
-          className="absolute inset-y-0 right-0 flex items-center pr-2.5 text-gray-400 hover:text-gray-600 text-xs"
+          className="absolute inset-y-0 right-2.5 my-auto flex items-center text-slate-400 hover:text-slate-600 transition-colors p-0.5 cursor-pointer"
           aria-label="Clear search"
         >
-          ✕
+          <X className="w-3.5 h-3.5" />
         </button>
       )}
     </div>

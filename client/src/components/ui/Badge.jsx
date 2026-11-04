@@ -5,25 +5,30 @@ export default function Badge({ status }) {
 
   const normalized = String(status).trim().toLowerCase();
 
-  let style = "bg-gray-100 text-gray-700 border-gray-300";
+  let containerStyle = "bg-slate-100 text-slate-700 border-slate-200";
+  let dotStyle = "bg-slate-400";
   let label = status;
 
   if (normalized === "pass") {
-    style = "bg-green-100 text-green-800 border-green-300";
+    containerStyle = "bg-emerald-50 text-emerald-800 border-emerald-200/90";
+    dotStyle = "bg-emerald-500";
     label = "Pass";
   } else if (normalized === "fail") {
-    style = "bg-red-100 text-red-800 border-red-300";
+    containerStyle = "bg-rose-50 text-rose-800 border-rose-200/90";
+    dotStyle = "bg-rose-500";
     label = "Fail";
   } else if (normalized === "incomplete") {
-    style = "bg-amber-100 text-amber-800 border-amber-300";
+    containerStyle = "bg-amber-50 text-amber-800 border-amber-200/90";
+    dotStyle = "bg-amber-500";
     label = "Incomplete";
   }
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${style}`}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${containerStyle}`}
     >
-      {label}
+      <span className={`h-1.5 w-1.5 rounded-full ${dotStyle}`} />
+      <span>{label}</span>
     </span>
   );
 }

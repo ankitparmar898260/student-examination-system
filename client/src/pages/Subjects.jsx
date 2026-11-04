@@ -10,6 +10,7 @@ import Modal from "../components/ui/Modal";
 import FormInput from "../components/ui/FormInput";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
 import AlertMessage from "../components/ui/AlertMessage";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 
 export default function Subjects() {
   const [subjects, setSubjects] = useState([]);
@@ -37,7 +38,7 @@ export default function Subjects() {
         type: "error",
         message:
           err.response?.data?.message ||
-          "Failed to load subjects. Make sure backend is running.",
+          "Failed to load subjects. Make sure backend is running on http://localhost:5000.",
       });
     } finally {
       setLoading(false);
@@ -82,13 +83,10 @@ export default function Subjects() {
     setForm(newForm);
 
     const newErrors = { ...errors };
-
-    // Clear field-specific error if typing
     if (newErrors[name]) {
       delete newErrors[name];
     }
 
-    // Special Real-Time Validation: passMarks <= maxMarks
     const maxVal = parseFloat(name === "maxMarks" ? value : newForm.maxMarks);
     const passVal = parseFloat(name === "passMarks" ? value : newForm.passMarks);
 
@@ -181,33 +179,57 @@ export default function Subjects() {
   };
 
   const columns = [
-    { key: "subjectCode", label: "Subject Code" },
-    { key: "subjectName", label: "Subject Name" },
-    { key: "maxMarks", label: "Max Marks", align: "center" },
-    { key: "passMarks", label: "Pass Marks", align: "center" },
+    {
+      key: "subjectCode",
+      label: "Subject Code",
+      render: (row) => (
+        <span className="font-mono font-medium text-xs text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+          {row.subjectCode}
+        </span>
+      ),
+    },
+    {
+      key: "subjectName",
+      label: "Subject Name",
+      render: (row) => <span className="font-semibold text-slate-900">{row.subjectName}</span>,
+    },
+    {
+      key: "maxMarks",
+      label: "Max Marks",
+      align: "center",
+      render: (row) => <span className="font-mono text-slate-800 font-medium">{row.maxMarks}</span>,
+    },
+    {
+      key: "passMarks",
+      label: "Pass Marks",
+      align: "center",
+      render: (row) => (
+        <span className="font-mono text-emerald-700 font-medium bg-emerald-50/60 px-2 py-0.5 rounded border border-emerald-200">
+          {row.passMarks}
+        </span>
+      ),
+    },
     {
       key: "actions",
       label: "Actions",
       align: "center",
       render: (row) => (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-1.5">
           <button
             type="button"
             onClick={() => openEditModal(row)}
-            className="p-1 text-blue-600 hover:text-blue-800 rounded transition-colors"
-            title="Edit"
+            className="p-1.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+            title="Edit Subject"
           >
-            ✏️
+            <Pencil className="w-3.5 h-3.5" />
           </button>
           <button
             type="button"
-            onClick={() =>
-              setConfirmDeleteId(row.subjectId || row.id)
-            }
-            className="p-1 text-red-600 hover:text-red-800 rounded transition-colors"
-            title="Delete"
+            onClick={() => setConfirmDeleteId(row.subjectId || row.id)}
+            className="p-1.5 text-slate-600 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+            title="Delete Subject"
           >
-            🗑️
+            <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
       ),
@@ -226,17 +248,20 @@ export default function Subjects() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Subjects</h2>
-          <p className="text-xs text-gray-500">Configure courses, maximum and passing marks</p>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Subjects Master</h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Define course modules, maximum scoring benchmarks and passing cutoffs
+          </p>
         </div>
         <button
           type="button"
           onClick={openAddModal}
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition-colors shadow-sm"
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg transition-colors shadow-xs cursor-pointer self-start sm:self-auto"
         >
-          + Add Subject
+          <Plus className="w-4 h-4" />
+          <span>Add Subject</span>
         </button>
       </div>
 
@@ -244,7 +269,7 @@ export default function Subjects() {
       <DataTable
         columns={columns}
         data={subjects}
-        emptyMessage="No subjects found. Click '+ Add Subject' to add one!"
+        emptyMessage="No subjects found. Click '+ Add Subject' to add one."
         loading={loading}
       />
 
@@ -252,17 +277,17 @@ export default function Subjects() {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={editingSubject ? "Edit Subject" : "Add Subject"}
+        title={editingSubject ? "Edit Subject Criteria" : "Add New Subject"}
         size="md"
       >
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <FormInput
             label="Subject Code"
             name="subjectCode"
             value={form.subjectCode}
             onChange={handleInputChange}
             error={errors.subjectCode}
-            placeholder="e.g. MATH101"
+            placeholder="e.g. CS101"
             required
           />
           <FormInput
@@ -271,46 +296,49 @@ export default function Subjects() {
             value={form.subjectName}
             onChange={handleInputChange}
             error={errors.subjectName}
-            placeholder="e.g. Mathematics"
-            required
-          />
-          <FormInput
-            label="Max Marks"
-            name="maxMarks"
-            type="number"
-            min={1}
-            value={form.maxMarks}
-            onChange={handleInputChange}
-            error={errors.maxMarks}
-            placeholder="e.g. 100"
-            required
-          />
-          <FormInput
-            label="Pass Marks"
-            name="passMarks"
-            type="number"
-            min={1}
-            value={form.passMarks}
-            onChange={handleInputChange}
-            error={errors.passMarks}
-            placeholder="e.g. 40"
+            placeholder="e.g. Database Management Systems"
             required
           />
 
-          <div className="flex justify-end gap-3 mt-6 pt-3 border-t border-gray-200">
+          <div className="grid grid-cols-2 gap-3">
+            <FormInput
+              label="Max Marks"
+              name="maxMarks"
+              type="number"
+              min={1}
+              value={form.maxMarks}
+              onChange={handleInputChange}
+              error={errors.maxMarks}
+              placeholder="e.g. 100"
+              required
+            />
+            <FormInput
+              label="Pass Marks"
+              name="passMarks"
+              type="number"
+              min={1}
+              value={form.passMarks}
+              onChange={handleInputChange}
+              error={errors.passMarks}
+              placeholder="e.g. 40"
+              required
+            />
+          </div>
+
+          <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-100">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-200 hover:bg-gray-300 rounded transition-colors"
+              className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting || hasPassMarksError}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
-              {submitting ? "Saving..." : "Save"}
+              {submitting ? "Saving..." : "Save Subject"}
             </button>
           </div>
         </form>
@@ -321,8 +349,8 @@ export default function Subjects() {
         isOpen={Boolean(confirmDeleteId)}
         onCancel={() => setConfirmDeleteId(null)}
         onConfirm={handleDeleteConfirm}
-        message="Are you sure you want to delete this subject? This action cannot be undone."
-        confirmLabel="Delete"
+        message="Are you sure you want to delete this subject? Exams and marks dependent on this subject will be removed."
+        confirmLabel="Delete Subject"
       />
     </div>
   );

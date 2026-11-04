@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 
 export default function Layout() {
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">
+    <div className="flex h-screen bg-slate-50 overflow-hidden font-sans text-slate-800">
       {/* Sidebar (left, fixed width w-64) */}
       <Sidebar />
 
@@ -15,8 +15,8 @@ export default function Layout() {
         <Navbar />
 
         {/* Content Area */}
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="max-w-7xl mx-auto">
+        <main className="flex-1 overflow-y-auto p-6 sm:p-8">
+          <div className="max-w-6xl mx-auto">
             <Outlet />
           </div>
         </main>

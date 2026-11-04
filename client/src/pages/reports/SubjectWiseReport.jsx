@@ -64,7 +64,7 @@ export default function SubjectWiseReport() {
   }, [selectedExamId]);
 
   const examOptions = [
-    { value: "", label: "-- Select Exam --" },
+    { value: "", label: "-- Select Examination --" },
     ...exams.map((ex) => ({
       value: String(ex.examId || ex.id),
       label: `${ex.examName} (${ex.academicYear})`,
@@ -72,38 +72,55 @@ export default function SubjectWiseReport() {
   ];
 
   const columns = [
-    { key: "subjectName", label: "Subject Name" },
+    {
+      key: "subjectName",
+      label: "Subject Title",
+      render: (row) => <span className="font-semibold text-slate-900">{row.subjectName}</span>,
+    },
     {
       key: "highestMarks",
-      label: "Highest Marks",
+      label: "Highest Score",
       align: "center",
       render: (row) =>
-        row.highestMarks !== null && row.highestMarks !== undefined
-          ? row.highestMarks
-          : "-",
+        row.highestMarks !== null && row.highestMarks !== undefined ? (
+          <span className="font-mono font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded border border-indigo-200">
+            {row.highestMarks}
+          </span>
+        ) : (
+          <span className="font-mono text-slate-300">-</span>
+        ),
     },
     {
       key: "averageMarks",
-      label: "Average Marks",
+      label: "Class Average",
       align: "center",
       render: (row) =>
-        row.averageMarks !== null && row.averageMarks !== undefined
-          ? Number(row.averageMarks).toFixed(2)
-          : "-",
+        row.averageMarks !== null && row.averageMarks !== undefined ? (
+          <span className="font-mono font-semibold text-slate-800">
+            {Number(row.averageMarks).toFixed(2)}
+          </span>
+        ) : (
+          <span className="font-mono text-slate-300">-</span>
+        ),
     },
     {
       key: "failedCount",
-      label: "No. of Failed Students",
+      label: "Unsuccessful Count",
       align: "center",
-      render: (row) => (
-        <span
-          className={`font-semibold ${
-            (row.failedCount || 0) > 0 ? "text-red-600" : "text-green-600"
-          }`}
-        >
-          {row.failedCount ?? 0}
-        </span>
-      ),
+      render: (row) => {
+        const count = row.failedCount ?? 0;
+        return (
+          <span
+            className={`inline-flex items-center gap-1 font-mono text-xs font-semibold px-2.5 py-0.5 rounded-full border ${
+              count > 0
+                ? "bg-rose-50 text-rose-700 border-rose-200"
+                : "bg-emerald-50 text-emerald-700 border-emerald-200"
+            }`}
+          >
+            {count} {count === 1 ? "Student" : "Students"}
+          </span>
+        );
+      },
     },
   ];
 
@@ -120,18 +137,18 @@ export default function SubjectWiseReport() {
 
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-900">
-          Subject-wise Analysis Report
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+          Subject-wise Performance Analytics
         </h2>
-        <p className="text-xs text-gray-500">
-          Analytics showing highest marks, average score, and failure count per subject
+        <p className="text-xs text-slate-500 mt-0.5">
+          Benchmark evaluation showing highest marks, class mean and candidate failure counts
         </p>
       </div>
 
-      {/* Filter */}
-      <div className="mb-5 bg-white p-4 rounded-lg border border-gray-200 flex items-center">
+      {/* Filter Card */}
+      <div className="mb-5 bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs flex items-center max-w-md">
         <FilterDropdown
-          label="Select Exam"
+          label="Examination"
           value={selectedExamId}
           onChange={(val) => setSelectedExamId(val)}
           options={examOptions}
@@ -144,8 +161,8 @@ export default function SubjectWiseReport() {
         data={reports}
         emptyMessage={
           selectedExamId
-            ? "No subject analytics available for this exam."
-            : "Please select an exam to view subject analysis."
+            ? "No subject analytics on file for this examination session."
+            : "Select an examination to display subject benchmark analytics."
         }
         loading={loadingData || loadingExams}
       />

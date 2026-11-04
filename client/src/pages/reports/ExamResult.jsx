@@ -6,6 +6,7 @@ import FilterDropdown from "../../components/ui/FilterDropdown";
 import ExportButton from "../../components/ui/ExportButton";
 import Badge from "../../components/ui/Badge";
 import AlertMessage from "../../components/ui/AlertMessage";
+import { Trophy, Medal, Award } from "lucide-react";
 
 export default function ExamResult() {
   const [exams, setExams] = useState([]);
@@ -67,7 +68,7 @@ export default function ExamResult() {
 
   const handleExportCSV = async () => {
     if (!selectedExamId) {
-      setAlert({ type: "error", message: "Please select an exam first." });
+      setAlert({ type: "error", message: "Please select an examination first." });
       return;
     }
 
@@ -83,7 +84,7 @@ export default function ExamResult() {
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-      setAlert({ type: "success", message: "CSV exported successfully!" });
+      setAlert({ type: "success", message: "Official CSV roster exported successfully!" });
     } catch (err) {
       setAlert({
         type: "error",
@@ -95,7 +96,7 @@ export default function ExamResult() {
   };
 
   const examOptions = [
-    { value: "", label: "-- Select Exam --" },
+    { value: "", label: "-- Select Examination --" },
     ...exams.map((ex) => ({
       value: String(ex.examId || ex.id),
       label: `${ex.examName} (${ex.academicYear})`,
@@ -105,44 +106,96 @@ export default function ExamResult() {
   const columns = [
     {
       key: "rank",
-      label: "Rank",
+      label: "Merit Rank",
       align: "center",
-      render: (row) =>
-        row.rank !== null && row.rank !== undefined ? (
-          <span className="font-bold text-gray-900">#{row.rank}</span>
-        ) : (
-          <span className="text-gray-400">-</span>
-        ),
+      render: (row) => {
+        if (row.rank === 1) {
+          return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">
+              <Trophy className="w-3 h-3 text-amber-600" />
+              <span>Rank 1</span>
+            </span>
+          );
+        } else if (row.rank === 2) {
+          return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300">
+              <Medal className="w-3 h-3 text-slate-500" />
+              <span>Rank 2</span>
+            </span>
+          );
+        } else if (row.rank === 3) {
+          return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-900 border border-orange-300">
+              <Award className="w-3 h-3 text-orange-600" />
+              <span>Rank 3</span>
+            </span>
+          );
+        } else if (row.rank) {
+          return (
+            <span className="font-mono font-bold text-xs text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
+              #{row.rank}
+            </span>
+          );
+        } else {
+          return <span className="text-slate-300 font-mono">-</span>;
+        }
+      },
     },
-    { key: "rollNumber", label: "Roll No" },
-    { key: "fullName", label: "Full Name" },
-    { key: "department", label: "Department" },
+    {
+      key: "rollNumber",
+      label: "Roll No",
+      render: (row) => (
+        <span className="font-mono text-xs font-medium text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+          {row.rollNumber}
+        </span>
+      ),
+    },
+    {
+      key: "fullName",
+      label: "Full Name",
+      render: (row) => <span className="font-semibold text-slate-900">{row.fullName}</span>,
+    },
+    {
+      key: "department",
+      label: "Department",
+      render: (row) => <span className="text-xs text-slate-600 font-medium">{row.department}</span>,
+    },
     {
       key: "totalObtained",
       label: "Obtained",
       align: "center",
-      render: (row) =>
-        row.totalObtained !== null && row.totalObtained !== undefined
-          ? row.totalObtained
-          : "-",
+      render: (row) => (
+        <span className="font-mono font-bold text-slate-900 text-xs">
+          {row.totalObtained !== null && row.totalObtained !== undefined
+            ? row.totalObtained
+            : "-"}
+        </span>
+      ),
     },
     {
       key: "totalMaxMarks",
       label: "Max",
       align: "center",
-      render: (row) =>
-        row.totalMaxMarks !== null && row.totalMaxMarks !== undefined
-          ? row.totalMaxMarks
-          : "-",
+      render: (row) => (
+        <span className="font-mono text-slate-500 text-xs">
+          {row.totalMaxMarks !== null && row.totalMaxMarks !== undefined
+            ? row.totalMaxMarks
+            : "-"}
+        </span>
+      ),
     },
     {
       key: "percentage",
       label: "Percentage",
       align: "center",
       render: (row) =>
-        row.percentage !== null && row.percentage !== undefined
-          ? `${Number(row.percentage).toFixed(2)}%`
-          : "-",
+        row.percentage !== null && row.percentage !== undefined ? (
+          <span className="font-mono font-bold text-slate-900 text-xs">
+            {Number(row.percentage).toFixed(2)}%
+          </span>
+        ) : (
+          <span className="font-mono text-slate-300">-</span>
+        ),
     },
     {
       key: "overallResult",
@@ -166,23 +219,23 @@ export default function ExamResult() {
       {/* Header */}
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Exam Results</h2>
-          <p className="text-xs text-gray-500">
-            Merit ranks, percentage, pass/fail status and CSV export
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Examination Results Roster</h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Merit ranks, aggregate scores, percentage calculations and server-side CSV streaming
           </p>
         </div>
 
         <ExportButton
           onClick={handleExportCSV}
           disabled={exporting || !selectedExamId || results.length === 0}
-          label={exporting ? "Exporting..." : "Export CSV"}
+          label={exporting ? "Streaming CSV..." : "Export CSV Report"}
         />
       </div>
 
-      {/* Filter */}
-      <div className="mb-5 bg-white p-4 rounded-lg border border-gray-200 flex items-center">
+      {/* Filter Card */}
+      <div className="mb-5 bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs flex items-center max-w-md">
         <FilterDropdown
-          label="Select Exam"
+          label="Examination"
           value={selectedExamId}
           onChange={(val) => setSelectedExamId(val)}
           options={examOptions}
@@ -195,8 +248,8 @@ export default function ExamResult() {
         data={results}
         emptyMessage={
           selectedExamId
-            ? "No result records found for this exam."
-            : "Please select an exam to view results."
+            ? "No evaluation results available for this examination."
+            : "Select an examination to display merit ranks and scoring transcript."
         }
         loading={loadingData || loadingExams}
       />

@@ -1,4 +1,5 @@
 import React from "react";
+import { Filter } from "lucide-react";
 
 export default function FilterDropdown({
   label,
@@ -9,14 +10,15 @@ export default function FilterDropdown({
   return (
     <div className="flex items-center gap-2">
       {label && (
-        <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
-          {label}:
+        <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap flex items-center gap-1.5">
+          <Filter className="w-3.5 h-3.5 text-slate-400" />
+          <span>{label}:</span>
         </label>
       )}
       <select
         value={value ?? ""}
         onChange={(e) => onChange(e.target.value)}
-        className="px-3 py-2 text-sm bg-white border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+        className="px-3 py-1.5 text-xs font-medium bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/15 focus:border-indigo-600 text-slate-800 transition-all shadow-2xs cursor-pointer"
       >
         {options.map((opt, idx) => (
           <option key={opt.key ?? opt.value ?? idx} value={opt.value}>

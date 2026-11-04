@@ -63,7 +63,7 @@ export default function ExamSubjectList() {
   }, [selectedExamId]);
 
   const examOptions = [
-    { value: "", label: "-- Select Exam --" },
+    { value: "", label: "-- Select Examination --" },
     ...exams.map((ex) => ({
       value: String(ex.examId || ex.id),
       label: `${ex.examName} (${ex.academicYear})`,
@@ -71,10 +71,36 @@ export default function ExamSubjectList() {
   ];
 
   const columns = [
-    { key: "subjectCode", label: "Subject Code" },
-    { key: "subjectName", label: "Subject Name" },
-    { key: "maxMarks", label: "Max Marks", align: "center" },
-    { key: "passMarks", label: "Pass Marks", align: "center" },
+    {
+      key: "subjectCode",
+      label: "Subject Code",
+      render: (row) => (
+        <span className="font-mono text-xs font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+          {row.subjectCode}
+        </span>
+      ),
+    },
+    {
+      key: "subjectName",
+      label: "Subject Title",
+      render: (row) => <span className="font-semibold text-slate-900">{row.subjectName}</span>,
+    },
+    {
+      key: "maxMarks",
+      label: "Max Marks",
+      align: "center",
+      render: (row) => <span className="font-mono font-medium text-slate-800">{row.maxMarks}</span>,
+    },
+    {
+      key: "passMarks",
+      label: "Pass Marks",
+      align: "center",
+      render: (row) => (
+        <span className="font-mono font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+          {row.passMarks}
+        </span>
+      ),
+    },
   ];
 
   return (
@@ -90,16 +116,16 @@ export default function ExamSubjectList() {
 
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-900">Exam-wise Subject List</h2>
-        <p className="text-xs text-gray-500">
-          View subjects mapped to a specific examination
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Exam-wise Subject List</h2>
+        <p className="text-xs text-slate-500 mt-0.5">
+          Curriculum breakdown and marks allocation for assigned examination subjects
         </p>
       </div>
 
-      {/* Filter */}
-      <div className="mb-5 bg-white p-4 rounded-lg border border-gray-200 flex items-center">
+      {/* Filter Card */}
+      <div className="mb-5 bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs flex items-center max-w-md">
         <FilterDropdown
-          label="Select Exam"
+          label="Examination"
           value={selectedExamId}
           onChange={(val) => setSelectedExamId(val)}
           options={examOptions}
@@ -112,8 +138,8 @@ export default function ExamSubjectList() {
         data={subjects}
         emptyMessage={
           selectedExamId
-            ? "No subjects mapped to this exam."
-            : "Please select an exam to view subjects."
+            ? "No subjects mapped to this examination schedule."
+            : "Please select an examination above to view mapped subjects."
         }
         loading={loadingData || loadingExams}
       />

@@ -11,14 +11,14 @@ export default function SelectInput({
   disabled = false,
 }) {
   return (
-    <div className="w-full mb-3 text-left">
+    <div className="w-full mb-3.5 text-left">
       {label && (
         <label
           htmlFor={name}
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
         >
           {label}
-          {required && <span className="text-red-500 ml-0.5">*</span>}
+          {required && <span className="text-rose-500 ml-1 font-bold">*</span>}
         </label>
       )}
       <select
@@ -27,11 +27,11 @@ export default function SelectInput({
         value={value ?? ""}
         onChange={onChange}
         disabled={disabled}
-        className={`w-full px-3 py-2 text-sm rounded border transition-colors focus:outline-none focus:ring-1 ${
+        className={`w-full px-3.5 py-2.5 text-sm rounded-lg border transition-all duration-150 focus:outline-none ${
           error
-            ? "border-red-500 focus:border-red-500 focus:ring-red-500 text-red-900"
-            : "border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900"
-        } ${disabled ? "bg-gray-100 cursor-not-allowed text-gray-500" : "bg-white"}`}
+            ? "border-rose-400 bg-rose-50/30 text-rose-900 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20"
+            : "border-slate-300 bg-white text-slate-900 hover:border-slate-400 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/15"
+        } ${disabled ? "bg-slate-100 cursor-not-allowed text-slate-400 border-slate-200" : ""}`}
       >
         {options.map((opt, index) => (
           <option key={opt.key ?? opt.value ?? index} value={opt.value}>
@@ -39,7 +39,7 @@ export default function SelectInput({
           </option>
         ))}
       </select>
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-1.5 text-xs font-medium text-rose-600">{error}</p>}
     </div>
   );
 }

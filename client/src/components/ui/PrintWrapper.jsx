@@ -1,8 +1,9 @@
 import React from "react";
+import { Printer } from "lucide-react";
 
 export default function PrintWrapper({
   children,
-  buttonLabel = "🖨️ Print",
+  buttonLabel = "Print Marksheet",
 }) {
   const handlePrint = () => {
     window.print();
@@ -14,9 +15,10 @@ export default function PrintWrapper({
         <button
           type="button"
           onClick={handlePrint}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors shadow-sm cursor-pointer"
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors shadow-xs cursor-pointer hover:border-slate-400"
         >
-          {buttonLabel}
+          <Printer className="w-4 h-4 text-slate-500" />
+          <span>{buttonLabel}</span>
         </button>
       </div>
 

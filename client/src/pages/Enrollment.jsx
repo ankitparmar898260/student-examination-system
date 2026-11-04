@@ -8,6 +8,7 @@ import {
 import SelectInput from "../components/ui/SelectInput";
 import DataTable from "../components/ui/DataTable";
 import AlertMessage from "../components/ui/AlertMessage";
+import { UserCheck, UserPlus, Users } from "lucide-react";
 
 export default function Enrollment() {
   const [exams, setExams] = useState([]);
@@ -20,7 +21,6 @@ export default function Enrollment() {
   const [submitting, setSubmitting] = useState(false);
   const [alert, setAlert] = useState(null);
 
-  // Load Exams on mount
   useEffect(() => {
     const fetchExams = async () => {
       setLoadingExams(true);
@@ -46,7 +46,6 @@ export default function Enrollment() {
     fetchExams();
   }, []);
 
-  // Fetch Available & Enrolled when selectedExamId changes
   const fetchEnrollmentData = async (examId) => {
     if (!examId) {
       setAvailableStudents([]);
@@ -106,7 +105,7 @@ export default function Enrollment() {
 
   const handleEnrollSelected = async () => {
     if (!selectedExamId) {
-      setAlert({ type: "error", message: "Please select an exam first." });
+      setAlert({ type: "error", message: "Please select an examination first." });
       return;
     }
     if (selectedStudentIds.length === 0) {
@@ -125,7 +124,7 @@ export default function Enrollment() {
       });
       setAlert({
         type: "success",
-        message: `Successfully enrolled ${selectedStudentIds.length} student(s)!`,
+        message: `Successfully enrolled ${selectedStudentIds.length} candidate(s)!`,
       });
       fetchEnrollmentData(selectedExamId);
     } catch (err) {
@@ -139,7 +138,7 @@ export default function Enrollment() {
   };
 
   const examOptions = [
-    { value: "", label: "-- Select Exam --" },
+    { value: "", label: "-- Select Examination --" },
     ...exams.map((ex) => ({
       value: String(ex.examId || ex.id),
       label: `${ex.examName} (${ex.academicYear})`,
@@ -159,7 +158,7 @@ export default function Enrollment() {
           checked={allAvailableChecked}
           onChange={handleSelectAllAvailable}
           disabled={availableStudents.length === 0}
-          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
         />
       ),
       align: "center",
@@ -170,20 +169,60 @@ export default function Enrollment() {
             type="checkbox"
             checked={selectedStudentIds.includes(id)}
             onChange={() => handleToggleStudent(id)}
-            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
           />
         );
       },
     },
-    { key: "rollNumber", label: "Roll No" },
-    { key: "fullName", label: "Full Name" },
-    { key: "department", label: "Department" },
+    {
+      key: "rollNumber",
+      label: "Roll No",
+      render: (row) => (
+        <span className="font-mono text-xs font-medium text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+          {row.rollNumber}
+        </span>
+      ),
+    },
+    {
+      key: "fullName",
+      label: "Full Name",
+      render: (row) => <span className="font-semibold text-slate-900">{row.fullName}</span>,
+    },
+    {
+      key: "department",
+      label: "Department",
+      render: (row) => (
+        <span className="text-xs text-slate-600 font-medium">
+          {row.department}
+        </span>
+      ),
+    },
   ];
 
   const enrolledColumns = [
-    { key: "rollNumber", label: "Roll No" },
-    { key: "fullName", label: "Full Name" },
-    { key: "department", label: "Department" },
+    {
+      key: "rollNumber",
+      label: "Roll No",
+      render: (row) => (
+        <span className="font-mono text-xs font-medium text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+          {row.rollNumber}
+        </span>
+      ),
+    },
+    {
+      key: "fullName",
+      label: "Full Name",
+      render: (row) => <span className="font-semibold text-slate-900">{row.fullName}</span>,
+    },
+    {
+      key: "department",
+      label: "Department",
+      render: (row) => (
+        <span className="text-xs text-slate-600 font-medium">
+          {row.department}
+        </span>
+      ),
+    },
   ];
 
   return (
@@ -199,16 +238,16 @@ export default function Enrollment() {
 
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-900">Enrollment</h2>
-        <p className="text-xs text-gray-500">
-          Enroll eligible students into examination sessions
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Candidate Enrollment</h2>
+        <p className="text-xs text-slate-500 mt-0.5">
+          Select target examination to assign and enroll eligible student candidates
         </p>
       </div>
 
-      {/* Select Exam Filter */}
-      <div className="max-w-xs mb-6">
+      {/* Select Exam Filter Card */}
+      <div className="bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs mb-6 max-w-md">
         <SelectInput
-          label="Select Exam"
+          label="Target Examination Session"
           name="examId"
           value={selectedExamId}
           onChange={handleExamChange}
@@ -220,53 +259,69 @@ export default function Enrollment() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Available Students Box */}
-        <div className="bg-white border border-gray-200 rounded-lg p-5 shadow-xs">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold text-gray-900">
-              Available Students ({availableStudents.length})
-            </h3>
+        <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex flex-col">
+          <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+            <div className="flex items-center gap-2">
+              <UserPlus className="w-4 h-4 text-indigo-600" />
+              <h3 className="text-sm font-bold text-slate-900">
+                Eligible to Enroll ({availableStudents.length})
+              </h3>
+            </div>
             <button
               type="button"
               onClick={handleEnrollSelected}
               disabled={submitting || selectedStudentIds.length === 0}
-              className="px-3.5 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
-              {submitting
-                ? "Enrolling..."
-                : `Enroll Selected (${selectedStudentIds.length})`}
+              <UserCheck className="w-3.5 h-3.5" />
+              <span>
+                {submitting
+                  ? "Enrolling..."
+                  : `Enroll Selected (${selectedStudentIds.length})`}
+              </span>
             </button>
           </div>
 
-          <DataTable
-            columns={availableColumns}
-            data={availableStudents}
-            emptyMessage={
-              selectedExamId
-                ? "No available students to enroll (all enrolled or no students)."
-                : "Please select an exam first."
-            }
-            loading={loadingData}
-          />
+          <div className="flex-1">
+            <DataTable
+              columns={availableColumns}
+              data={availableStudents}
+              emptyMessage={
+                selectedExamId
+                  ? "All eligible candidates are currently enrolled in this exam."
+                  : "Please choose an exam to inspect candidate availability."
+              }
+              loading={loadingData}
+            />
+          </div>
         </div>
 
         {/* Already Enrolled Box */}
-        <div className="bg-white border border-gray-200 rounded-lg p-5 shadow-xs">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold text-gray-900">
-              Already Enrolled ({enrolledStudents.length})
-            </h3>
+        <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex flex-col">
+          <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-emerald-600" />
+              <h3 className="text-sm font-bold text-slate-900">
+                Currently Enrolled ({enrolledStudents.length})
+              </h3>
+            </div>
+            <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+              Active Roster
+            </span>
           </div>
 
-          <DataTable
-            columns={enrolledColumns}
-            data={enrolledStudents}
-            emptyMessage={
-              selectedExamId
-                ? "No students have been enrolled in this exam yet."
-                : "Please select an exam first."
-            }
-            loading={loadingData}
-          />
+          <div className="flex-1">
+            <DataTable
+              columns={enrolledColumns}
+              data={enrolledStudents}
+              emptyMessage={
+                selectedExamId
+                  ? "No candidate enrollments recorded yet for this session."
+                  : "Select an exam above to view registered enrollments."
+              }
+              loading={loadingData}
+            />
+          </div>
         </div>
       </div>
     </div>

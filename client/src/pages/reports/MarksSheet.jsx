@@ -7,6 +7,7 @@ import PrintWrapper from "../../components/ui/PrintWrapper";
 import Badge from "../../components/ui/Badge";
 import AlertMessage from "../../components/ui/AlertMessage";
 import Loader from "../../components/ui/Loader";
+import { GraduationCap, Award, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 
 export default function MarksSheet() {
   const [exams, setExams] = useState([]);
@@ -20,7 +21,6 @@ export default function MarksSheet() {
   const [loadingSheet, setLoadingSheet] = useState(false);
   const [alert, setAlert] = useState(null);
 
-  // Load Exams on mount
   useEffect(() => {
     const fetchExams = async () => {
       setLoadingExams(true);
@@ -45,7 +45,6 @@ export default function MarksSheet() {
     fetchExams();
   }, []);
 
-  // When Exam changes -> fetch enrolled students
   useEffect(() => {
     const fetchStudents = async () => {
       if (!selectedExamId) {
@@ -71,7 +70,7 @@ export default function MarksSheet() {
         setAlert({
           type: "error",
           message:
-            err.response?.data?.message || "Failed to load enrolled students.",
+            err.response?.data?.message || "Failed to load enrolled candidates.",
         });
       } finally {
         setLoadingStudents(false);
@@ -81,7 +80,6 @@ export default function MarksSheet() {
     fetchStudents();
   }, [selectedExamId]);
 
-  // When Student changes -> fetch marks sheet
   useEffect(() => {
     const fetchSheet = async () => {
       if (!selectedExamId || !selectedStudentId) {
@@ -97,7 +95,7 @@ export default function MarksSheet() {
         setAlert({
           type: "error",
           message:
-            err.response?.data?.message || "Failed to load marks sheet report.",
+            err.response?.data?.message || "Failed to load candidate marksheet.",
         });
         setMarksSheetData(null);
       } finally {
@@ -109,7 +107,7 @@ export default function MarksSheet() {
   }, [selectedExamId, selectedStudentId]);
 
   const examOptions = [
-    { value: "", label: "-- Select Exam --" },
+    { value: "", label: "-- Select Examination --" },
     ...exams.map((ex) => ({
       value: String(ex.examId || ex.id),
       label: `${ex.examName} (${ex.academicYear})`,
@@ -117,7 +115,7 @@ export default function MarksSheet() {
   ];
 
   const studentOptions = [
-    { value: "", label: "-- Select Student --" },
+    { value: "", label: "-- Select Candidate --" },
     ...enrolledStudents.map((st) => ({
       value: String(st.studentId || st.id),
       label: `${st.fullName} (${st.rollNumber})`,
@@ -137,92 +135,103 @@ export default function MarksSheet() {
 
       {/* Header */}
       <div className="mb-6 no-print">
-        <h2 className="text-xl font-bold text-gray-900">Student Marks Sheet</h2>
-        <p className="text-xs text-gray-500">
-          Individual student marksheet / report card with pass/fail evaluation
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Student Marks Sheet</h2>
+        <p className="text-xs text-slate-500 mt-0.5">
+          Generate, verify and print formal performance transcript and marksheet
         </p>
       </div>
 
-      {/* Filters */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mb-6 no-print">
-        <SelectInput
-          label="Exam"
-          name="examId"
-          value={selectedExamId}
-          onChange={(e) => setSelectedExamId(e.target.value)}
-          options={examOptions}
-          disabled={loadingExams}
-        />
-        <SelectInput
-          label="Student"
-          name="studentId"
-          value={selectedStudentId}
-          onChange={(e) => setSelectedStudentId(e.target.value)}
-          options={studentOptions}
-          disabled={loadingStudents || !selectedExamId}
-        />
+      {/* Selectors Bar */}
+      <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs mb-6 max-w-xl no-print">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <SelectInput
+            label="Examination Session"
+            name="examId"
+            value={selectedExamId}
+            onChange={(e) => setSelectedExamId(e.target.value)}
+            options={examOptions}
+            disabled={loadingExams}
+          />
+          <SelectInput
+            label="Target Candidate"
+            name="studentId"
+            value={selectedStudentId}
+            onChange={(e) => setSelectedStudentId(e.target.value)}
+            options={studentOptions}
+            disabled={loadingStudents || !selectedExamId}
+          />
+        </div>
       </div>
 
       {loadingSheet ? (
-        <div className="py-12 bg-white rounded-lg border border-gray-200">
+        <div className="py-20 bg-white rounded-2xl border border-slate-200">
           <Loader size="md" />
         </div>
       ) : marksSheetData ? (
-        <PrintWrapper buttonLabel="🖨️ Print Marksheet">
-          <div className="bg-white border border-gray-300 rounded-lg p-6 sm:p-8 shadow-xs max-w-3xl mx-auto">
-            {/* Header in Marksheet */}
-            <div className="border-b-2 border-gray-800 pb-4 mb-6 text-center">
-              <h2 className="text-xl font-bold uppercase tracking-wider text-gray-900">
-                Student Examination System
+        <PrintWrapper buttonLabel="Print Official Marksheet">
+          <div className="bg-white border-2 border-slate-300 rounded-2xl p-8 sm:p-10 shadow-sm max-w-3xl mx-auto print:border-none print:shadow-none print:p-0">
+            {/* Institution Letterhead Header */}
+            <div className="border-b-2 border-slate-900 pb-5 mb-6 text-center">
+              <div className="inline-flex items-center justify-center h-12 w-12 rounded-xl bg-slate-900 text-white mb-2 shadow-xs">
+                <GraduationCap className="w-6 h-6" />
+              </div>
+              <h2 className="text-lg font-bold uppercase tracking-wider text-slate-900">
+                Department of Academic Examinations
               </h2>
-              <p className="text-sm font-semibold text-gray-700 mt-1">
-                Official Statement of Marks
+              <p className="text-xs font-semibold text-slate-600 uppercase tracking-widest mt-0.5">
+                Official Statement of Marks &amp; Academic Transcript
               </p>
             </div>
 
-            {/* Student & Exam Info */}
-            <div className="grid grid-cols-2 gap-4 text-sm mb-6 bg-gray-50 p-4 rounded border border-gray-200">
+            {/* Candidate Metadata Banner */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200 mb-6 text-xs">
               <div>
-                <p className="text-gray-500 text-xs uppercase">Student Name</p>
-                <p className="font-bold text-gray-900">
+                <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] block mb-0.5">
+                  Candidate Name
+                </span>
+                <span className="font-bold text-slate-900 text-sm">
                   {marksSheetData.studentName}
-                </p>
+                </span>
               </div>
               <div>
-                <p className="text-gray-500 text-xs uppercase">Roll Number</p>
-                <p className="font-bold font-mono text-gray-900">
+                <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] block mb-0.5">
+                  Roll Number
+                </span>
+                <span className="font-mono font-bold text-slate-900 text-sm">
                   {marksSheetData.rollNumber}
-                </p>
+                </span>
               </div>
               <div>
-                <p className="text-gray-500 text-xs uppercase">Examination</p>
-                <p className="font-semibold text-gray-800">
+                <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] block mb-0.5">
+                  Examination
+                </span>
+                <span className="font-semibold text-slate-800">
                   {marksSheetData.examName}
-                </p>
+                </span>
               </div>
-              {marksSheetData.department && (
-                <div>
-                  <p className="text-gray-500 text-xs uppercase">Department</p>
-                  <p className="font-semibold text-gray-800">
-                    {marksSheetData.department}
-                  </p>
-                </div>
-              )}
+              <div>
+                <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] block mb-0.5">
+                  Department
+                </span>
+                <span className="font-semibold text-slate-800">
+                  {marksSheetData.department || "General"}
+                </span>
+              </div>
             </div>
 
-            {/* Marks Table */}
-            <div className="border border-gray-200 rounded overflow-hidden mb-6">
-              <table className="min-w-full divide-y divide-gray-200 text-sm">
-                <thead className="bg-gray-100 text-gray-700 font-semibold text-xs uppercase">
+            {/* Subject Marks Table */}
+            <div className="border border-slate-200 rounded-xl overflow-hidden mb-6">
+              <table className="min-w-full divide-y divide-slate-200 text-sm">
+                <thead className="bg-slate-100/90 text-slate-700 font-semibold text-xs uppercase tracking-wider">
                   <tr>
-                    <th className="px-4 py-3 text-left">Subject</th>
+                    <th className="px-4 py-3 text-left">Subject Syllabus</th>
                     <th className="px-4 py-3 text-center">Max Marks</th>
                     <th className="px-4 py-3 text-center">Pass Marks</th>
-                    <th className="px-4 py-3 text-center">Marks Obtained</th>
-                    <th className="px-4 py-3 text-center">Status</th>
+                    <th className="px-4 py-3 text-center">Obtained</th>
+                    <th className="px-4 py-3 text-center">Result</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-slate-100 bg-white">
                   {marksSheetData.subjects && marksSheetData.subjects.length > 0 ? (
                     marksSheetData.subjects.map((sub, idx) => {
                       const isNull =
@@ -238,17 +247,17 @@ export default function MarksSheet() {
                         : "Fail";
 
                       return (
-                        <tr key={idx} className="even:bg-gray-50">
-                          <td className="px-4 py-3 font-medium text-gray-900">
+                        <tr key={idx} className="hover:bg-slate-50/50">
+                          <td className="px-4 py-3 font-medium text-slate-900">
                             {sub.subjectName}
                           </td>
-                          <td className="px-4 py-3 text-center text-gray-700">
+                          <td className="px-4 py-3 text-center font-mono text-slate-600">
                             {sub.maxMarks}
                           </td>
-                          <td className="px-4 py-3 text-center text-gray-700">
+                          <td className="px-4 py-3 text-center font-mono text-slate-600">
                             {sub.passMarks}
                           </td>
-                          <td className="px-4 py-3 text-center font-semibold text-gray-900">
+                          <td className="px-4 py-3 text-center font-mono font-bold text-slate-900">
                             {isNull ? "-" : sub.marksObtained}
                           </td>
                           <td className="px-4 py-3 text-center">
@@ -259,68 +268,84 @@ export default function MarksSheet() {
                     })
                   ) : (
                     <tr>
-                      <td
-                        colSpan={5}
-                        className="px-4 py-4 text-center text-gray-500"
-                      >
-                        No subject marks recorded.
+                      <td colSpan={5} className="px-4 py-6 text-center text-slate-400 text-xs">
+                        No subject evaluation records on file.
                       </td>
                     </tr>
                   )}
-                  {/* Total Row */}
-                  <tr className="bg-gray-100 font-bold border-t-2 border-gray-300">
-                    <td className="px-4 py-3 text-gray-900">TOTAL</td>
-                    <td className="px-4 py-3 text-center text-gray-900">
+                  {/* Aggregated Totals Row */}
+                  <tr className="bg-slate-100/90 font-bold border-t-2 border-slate-300 text-slate-900">
+                    <td className="px-4 py-3.5 uppercase tracking-wider text-xs">Total Aggregate</td>
+                    <td className="px-4 py-3.5 text-center font-mono">
                       {marksSheetData.totalMaxMarks ?? "-"}
                     </td>
-                    <td className="px-4 py-3 text-center text-gray-500">-</td>
-                    <td className="px-4 py-3 text-center text-gray-900">
+                    <td className="px-4 py-3.5 text-center text-slate-400 font-mono">-</td>
+                    <td className="px-4 py-3.5 text-center font-mono text-base text-indigo-700">
                       {marksSheetData.totalObtained ?? "-"}
                     </td>
-                    <td className="px-4 py-3 text-center text-gray-500">-</td>
+                    <td className="px-4 py-3.5 text-center text-slate-400 font-mono">-</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
-            {/* Results Summary Box */}
-            <div className="bg-gray-50 p-5 rounded border border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            {/* Performance Summary Footnote */}
+            <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <p className="text-sm text-gray-600">
-                  Percentage:{" "}
-                  <strong className="text-base text-gray-900">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                    Cumulative Percentage:
+                  </span>
+                  <span className="text-lg font-bold font-mono text-slate-900">
                     {marksSheetData.percentage !== null &&
                     marksSheetData.percentage !== undefined
                       ? `${Number(marksSheetData.percentage).toFixed(2)}%`
                       : "-"}
-                  </strong>
-                </p>
+                  </span>
+                </div>
                 {marksSheetData.overallResult === "Fail" && (
-                  <p className="text-xs text-red-600 mt-0.5">
-                    (Reason: Not all subjects passed)
+                  <p className="text-xs text-rose-600 font-medium mt-1 flex items-center gap-1">
+                    <XCircle className="w-3.5 h-3.5" />
+                    Fail Condition: One or more subjects below required passing cutoff
                   </p>
                 )}
                 {marksSheetData.overallResult === "Incomplete" && (
-                  <p className="text-xs text-amber-600 mt-0.5">
-                    (Reason: Marks missing for one or more subjects)
+                  <p className="text-xs text-amber-700 font-medium mt-1 flex items-center gap-1">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    Incomplete: Evaluation marks unrecorded for enrolled subjects
+                  </p>
+                )}
+                {marksSheetData.overallResult === "Pass" && (
+                  <p className="text-xs text-emerald-700 font-medium mt-1 flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Pass Condition: All assigned curriculum subjects successfully cleared
                   </p>
                 )}
               </div>
 
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-semibold text-gray-700">
-                  Overall Result:
+              <div className="flex items-center gap-2.5">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  Final Status:
                 </span>
                 <Badge status={marksSheetData.overallResult} />
+              </div>
+            </div>
+
+            {/* Verification Signature line for print */}
+            <div className="hidden print:flex justify-between items-end mt-12 pt-8 text-xs text-slate-500 border-t border-slate-300">
+              <div>Date of Issue: {new Date().toLocaleDateString()}</div>
+              <div className="text-center">
+                <div className="w-48 border-b border-slate-400 mb-1"></div>
+                Controller of Examinations
               </div>
             </div>
           </div>
         </PrintWrapper>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-lg p-10 text-center text-gray-500 text-sm">
+        <div className="bg-white border border-slate-200/90 rounded-2xl p-12 text-center text-slate-400 text-sm shadow-xs">
           {!selectedExamId || !selectedStudentId
-            ? "Please select both Exam and Student to view Marks Sheet."
-            : "No marks record found for this student in the selected exam."}
+            ? "Please select both an examination session and candidate above to view marksheet."
+            : "No marksheet record on file for this candidate."}
         </div>
       )}
     </div>

@@ -24,7 +24,6 @@ export default function StudentListReport() {
       const list = res.data || [];
       setStudents(list);
 
-      // Collect unique departments
       const depts = new Set();
       list.forEach((item) => {
         if (item.department) depts.add(item.department);
@@ -49,24 +48,40 @@ export default function StudentListReport() {
     fetchReports(department, search);
   }, [department, search, fetchReports]);
 
-  const handleDepartmentChange = (val) => {
-    setDepartment(val);
-  };
-
-  const handleSearchChange = (val) => {
-    setSearch(val);
-  };
-
   const departmentOptions = [
     { value: "", label: "All Departments" },
     ...departmentsList.map((d) => ({ value: d, label: d })),
   ];
 
   const columns = [
-    { key: "rollNumber", label: "Roll No" },
-    { key: "fullName", label: "Full Name" },
-    { key: "email", label: "Email" },
-    { key: "department", label: "Department" },
+    {
+      key: "rollNumber",
+      label: "Roll No",
+      render: (row) => (
+        <span className="font-mono text-xs font-medium text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+          {row.rollNumber}
+        </span>
+      ),
+    },
+    {
+      key: "fullName",
+      label: "Candidate Name",
+      render: (row) => <span className="font-semibold text-slate-900">{row.fullName}</span>,
+    },
+    {
+      key: "email",
+      label: "Email Address",
+      render: (row) => <span className="text-xs text-slate-600">{row.email}</span>,
+    },
+    {
+      key: "department",
+      label: "Department",
+      render: (row) => (
+        <span className="text-xs font-medium text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full">
+          {row.department}
+        </span>
+      ),
+    },
   ];
 
   return (
@@ -82,25 +97,25 @@ export default function StudentListReport() {
 
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-900">Student List Report</h2>
-        <p className="text-xs text-gray-500">
-          Filter students by department or search by name / roll number
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Student Directory Report</h2>
+        <p className="text-xs text-slate-500 mt-0.5">
+          Filter candidates by academic department or search by name and roll number
         </p>
       </div>
 
-      {/* Filters Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-5 bg-white p-4 rounded-lg border border-gray-200">
+      {/* Filter Toolbar */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-5 bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs">
         <FilterDropdown
           label="Department"
           value={department}
-          onChange={handleDepartmentChange}
+          onChange={(val) => setDepartment(val)}
           options={departmentOptions}
         />
 
         <SearchInput
           value={search}
-          onChange={handleSearchChange}
-          placeholder="Search roll no or name..."
+          onChange={(val) => setSearch(val)}
+          placeholder="Search by name or roll no..."
         />
       </div>
 
@@ -108,7 +123,7 @@ export default function StudentListReport() {
       <DataTable
         columns={columns}
         data={students}
-        emptyMessage="No students match the selected filter."
+        emptyMessage="No students match the selected filter criteria."
         loading={loading}
       />
     </div>
