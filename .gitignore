@@ -1,0 +1,17 @@
+node_modules/
+.env
+.env.*
+!.env.example
+dist/
+build/
+coverage/
+bin/
+obj/
+.vs/
+.vscode/
+*.log
+
+# Personal Knowledge & Development Notes
+/Development Plan - Student Examination System.md
+/PROJECT_NOTES.md
+/FRONTEND_REQUIREMENTS.md
