@@ -15,3 +15,8 @@ obj/
 /Development Plan - Student Examination System.md
 /PROJECT_NOTES.md
 /FRONTEND_REQUIREMENTS.md
+
+
+# Sensitive Configuration Files
+/server/appsettings.json
+/server/appsettings.Development.json
