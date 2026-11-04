@@ -224,6 +224,7 @@ export default function MarksSheet() {
               <table className="min-w-full divide-y divide-slate-200 text-sm">
                 <thead className="bg-[#F8FAFC] text-slate-700 font-semibold text-xs uppercase tracking-wider">
                   <tr>
+                    <th className="px-4 py-3 text-center w-16">S.No.</th>
                     <th className="px-4 py-3 text-left">Subject Syllabus</th>
                     <th className="px-4 py-3 text-center">Max Marks</th>
                     <th className="px-4 py-3 text-center">Pass Marks</th>
@@ -248,6 +249,9 @@ export default function MarksSheet() {
 
                       return (
                         <tr key={idx} className="hover:bg-blue-50/25">
+                          <td className="px-4 py-3 text-center font-mono text-xs font-semibold text-slate-500 w-16">
+                            {idx + 1}
+                          </td>
                           <td className="px-4 py-3 font-medium text-slate-900">
                             {sub.subjectName}
                           </td>
@@ -268,14 +272,14 @@ export default function MarksSheet() {
                     })
                   ) : (
                     <tr>
-                      <td colSpan={5} className="px-4 py-6 text-center text-slate-400 text-xs">
+                      <td colSpan={6} className="px-4 py-6 text-center text-slate-400 text-xs">
                         No subject evaluation records on file.
                       </td>
                     </tr>
                   )}
                   {/* Aggregated Totals Row */}
                   <tr className="bg-slate-50 font-bold border-t-2 border-slate-200 text-slate-900">
-                    <td className="px-4 py-3.5 uppercase tracking-wider text-xs">Total Aggregate</td>
+                    <td colSpan={2} className="px-4 py-3.5 uppercase tracking-wider text-xs">Total Aggregate</td>
                     <td className="px-4 py-3.5 text-center font-mono">
                       {marksSheetData.totalMaxMarks ?? "-"}
                     </td>

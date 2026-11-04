@@ -336,6 +336,9 @@ export default function MarksEntry() {
             <table className="min-w-full divide-y divide-slate-200 text-sm">
               <thead className="bg-[#F8FAFC]">
                 <tr>
+                  <th className="px-4 py-3 text-center font-semibold text-slate-600 text-xs uppercase tracking-wider w-16">
+                    S.No.
+                  </th>
                   <th className="px-4 py-3 text-left font-semibold text-slate-600 text-xs uppercase tracking-wider">
                     Roll No
                   </th>
@@ -351,7 +354,7 @@ export default function MarksEntry() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 bg-white">
-                {marksData.map((row) => {
+                {marksData.map((row, idx) => {
                   const errorMsg = rowErrors[row.enrollmentId];
                   const hasError = Boolean(errorMsg);
 
@@ -360,6 +363,9 @@ export default function MarksEntry() {
                       key={row.enrollmentId}
                       className="hover:bg-blue-50/25 transition-colors"
                     >
+                      <td className="px-4 py-3.5 text-center text-xs font-mono font-semibold text-slate-500 w-16">
+                        {idx + 1}
+                      </td>
                       <td className="px-4 py-3.5 text-slate-900 font-mono text-xs">
                         <span className="font-mono text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">
                           {row.rollNumber}
@@ -406,6 +412,16 @@ export default function MarksEntry() {
                 })}
               </tbody>
             </table>
+          </div>
+        )}
+        {!loadingMarks && marksData.length > 0 && (
+          <div className="mt-4 pt-3 border-t border-slate-200 text-xs font-medium text-slate-500 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <span>Total Enrolled Students:</span>
+              <span className="font-mono font-semibold text-slate-700 bg-white px-2 py-0.5 rounded-md border border-slate-200">
+                {marksData.length}
+              </span>
+            </div>
           </div>
         )}
       </div>

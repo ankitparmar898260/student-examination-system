@@ -156,7 +156,7 @@ public class ReportsController : ControllerBase
         var reportSubjects = new List<MarksSheetSubjectDto>();
         int totalMaxMarks = 0;
         decimal totalObtained = 0;
-        bool hasMissingMarks = false;
+        bool hasMissingMarks = examSubjects.Count == 0;
         bool hasFailedSubject = false;
 
         foreach (var sub in examSubjects)
@@ -394,7 +394,7 @@ public class ReportsController : ControllerBase
         {
             var studentMarks = allMarks.Where(m => m.EnrollmentId == enrollment.EnrollmentId).ToList();
 
-            bool hasMissing = false;
+            bool hasMissing = examSubjects.Count == 0;
             bool hasFailed = false;
             decimal totalObtained = 0;
 
