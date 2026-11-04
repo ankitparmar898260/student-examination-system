@@ -1,0 +1,9 @@
+{
+  "name": "Student Examination System",
+  "description": "Comprehensive Examination Management and Reporting System featuring student enrollment, marks entry, pass/fail analytics, and printable marksheets.",
+  "prompt": "Student Examination System with full data entry screens and detailed reports.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ],
+  "permissions": []
+}
