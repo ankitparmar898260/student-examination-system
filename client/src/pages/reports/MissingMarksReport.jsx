@@ -1,3 +1,8 @@
+/**
+ * Report: Missing Marks Report
+ * Purpose: Identifies students who have not yet been awarded marks for specific exam subjects.
+ */
+
 import React, { useState, useEffect } from "react";
 import { getExams } from "../../api/exams";
 import { getMissingMarksReport } from "../../api/reports";

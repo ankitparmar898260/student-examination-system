@@ -1,3 +1,8 @@
+/**
+ * Report: Student Marksheet
+ * Purpose: Generates and prints an official individual student marksheet showing subject-wise marks and final grade/status.
+ */
+
 import React, { useState, useEffect } from "react";
 import { getExams } from "../../api/exams";
 import { getEnrolledStudents } from "../../api/enrollment";

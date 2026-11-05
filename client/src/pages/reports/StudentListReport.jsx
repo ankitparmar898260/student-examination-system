@@ -1,3 +1,8 @@
+/**
+ * Report: Student List Report
+ * Purpose: Displays master list of registered students with department filtering, search, and CSV export.
+ */
+
 import React, { useState, useEffect, useCallback } from "react";
 import { getStudentListReport } from "../../api/reports";
 import DataTable from "../../components/ui/DataTable";

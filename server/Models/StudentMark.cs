@@ -1,3 +1,6 @@
+// Model: StudentMark (StudentMarks Table)
+// Purpose: Stores marks obtained by an enrolled student for a particular subject.
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;

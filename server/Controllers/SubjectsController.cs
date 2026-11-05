@@ -1,3 +1,6 @@
+// Controller: SubjectsController
+// Purpose: Handles CRUD operations for subjects, ensuring unique subject codes and pass marks <= max marks constraints.
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Data;

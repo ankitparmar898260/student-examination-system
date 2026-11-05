@@ -1,3 +1,8 @@
+/**
+ * Page: Exams Management
+ * Purpose: Handles CRUD operations for exams and assigning subjects to exams.
+ */
+
 import React, { useState, useEffect } from "react";
 import {
   getExams,

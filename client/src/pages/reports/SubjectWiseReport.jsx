@@ -1,3 +1,8 @@
+/**
+ * Report: Subject-Wise Performance Report
+ * Purpose: Displays student marks, highest/average scores, and pass/fail statistics for a specific exam subject.
+ */
+
 import React, { useState, useEffect } from "react";
 import { getExams } from "../../api/exams";
 import { getSubjectWiseReport } from "../../api/reports";

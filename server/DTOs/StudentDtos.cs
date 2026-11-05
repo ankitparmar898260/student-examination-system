@@ -1,3 +1,6 @@
+// DTOs: Student Data Transfer Objects
+// Purpose: Defines request/response models for student registration, profile updates, and detail responses.
+
 using System.ComponentModel.DataAnnotations;
 
 namespace server.DTOs;

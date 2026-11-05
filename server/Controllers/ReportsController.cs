@@ -1,3 +1,6 @@
+// Controller: ReportsController
+// Purpose: Generates academic reports (marksheets, overall exam results, missing marks, subject performance, and CSV exports).
+
 using System.Globalization;
 using System.Text;
 using CsvHelper;

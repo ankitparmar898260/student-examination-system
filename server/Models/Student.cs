@@ -1,3 +1,6 @@
+// Model: Student (Students Table)
+// Purpose: Stores student master profile data (Roll Number, Full Name, Email, Department).
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;

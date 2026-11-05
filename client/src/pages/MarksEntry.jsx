@@ -1,3 +1,8 @@
+/**
+ * Page: Marks Entry
+ * Purpose: Provides a grid interface to enter and save bulk marks for enrolled students by exam and subject.
+ */
+
 import React, { useState, useEffect } from "react";
 import { getExams, getExamSubjects } from "../api/exams";
 import { getMarks, saveMarksBulk } from "../api/marks";

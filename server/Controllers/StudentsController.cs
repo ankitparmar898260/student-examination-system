@@ -1,3 +1,6 @@
+// Controller: StudentsController
+// Purpose: Handles CRUD operations for student profiles, duplicate roll/email validation, and department filtering.
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Data;

@@ -1,3 +1,6 @@
+// Model: StudentExamEnrollment (StudentExamEnrollments Table)
+// Purpose: Records which students are enrolled to appear in a specific exam.
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;

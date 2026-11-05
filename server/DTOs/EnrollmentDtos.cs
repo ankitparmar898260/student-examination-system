@@ -1,3 +1,6 @@
+// DTOs: Enrollment Data Transfer Objects
+// Purpose: Defines request/response models for enrolling students and fetching enrolled/available students.
+
 using System.ComponentModel.DataAnnotations;
 
 namespace server.DTOs;

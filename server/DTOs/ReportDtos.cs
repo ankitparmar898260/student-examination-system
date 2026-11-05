@@ -1,3 +1,6 @@
+// DTOs: Report Data Transfer Objects
+// Purpose: Defines structured data shapes returned by reporting APIs (marksheets, exam results, missing marks, subject performance).
+
 namespace server.DTOs;
 
 public class StudentListReportDto

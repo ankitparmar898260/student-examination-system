@@ -1,3 +1,6 @@
+// Controller: WeatherForecastController
+// Purpose: Default ASP.NET Core template controller for basic API health checking and testing.
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace server.Controllers;

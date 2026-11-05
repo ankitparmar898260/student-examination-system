@@ -1,3 +1,6 @@
+// Model: Exam (Exams Table)
+// Purpose: Stores exam metadata such as Exam Name and Academic Year.
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

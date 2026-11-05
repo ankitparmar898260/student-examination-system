@@ -1,3 +1,6 @@
+// DTOs: Exam Data Transfer Objects
+// Purpose: Defines request/response models for creating, updating, and viewing exams with their assigned subjects.
+
 using System.ComponentModel.DataAnnotations;
 
 namespace server.DTOs;

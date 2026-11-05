@@ -1,3 +1,6 @@
+// Model: ExamSubject (ExamSubjects Table)
+// Purpose: Maps which subjects are included in a specific exam (Many-to-Many relationship).
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;

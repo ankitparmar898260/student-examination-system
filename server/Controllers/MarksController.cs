@@ -1,3 +1,6 @@
+// Controller: MarksController
+// Purpose: Handles fetching marks entry grids and bulk upserting (insert/update) marks for enrolled students.
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Data;

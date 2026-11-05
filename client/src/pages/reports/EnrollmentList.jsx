@@ -1,3 +1,8 @@
+/**
+ * Report: Enrollment List
+ * Purpose: Displays and exports a list of students enrolled in a specific exam, with search and CSV export.
+ */
+
 import React, { useState, useEffect } from "react";
 import { getExams } from "../../api/exams";
 import { getEnrollmentListReport } from "../../api/reports";

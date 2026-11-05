@@ -1,3 +1,6 @@
+// DTOs: Subject Data Transfer Objects
+// Purpose: Defines request/response models for creating, updating, and returning subject master information.
+
 using System.ComponentModel.DataAnnotations;
 
 namespace server.DTOs;

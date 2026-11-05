@@ -1,3 +1,8 @@
+/**
+ * Report: Exam Result
+ * Purpose: Displays overall exam results with total marks, percentages, pass/fail status, and printable layout.
+ */
+
 import React, { useState, useEffect } from "react";
 import { getExams } from "../../api/exams";
 import { getExamResult, exportExamResultCSV } from "../../api/reports";

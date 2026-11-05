@@ -1,3 +1,6 @@
+// Model: Subject (Subjects Table)
+// Purpose: Stores subject master data (Subject Code, Name, Max Marks, Pass Marks).
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

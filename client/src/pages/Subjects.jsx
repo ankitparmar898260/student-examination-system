@@ -1,3 +1,8 @@
+/**
+ * Page: Subjects Management
+ * Purpose: Handles CRUD operations for subjects including subject codes, maximum marks, and passing marks.
+ */
+
 import React, { useState, useEffect } from "react";
 import {
   getSubjects,

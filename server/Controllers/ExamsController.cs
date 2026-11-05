@@ -1,3 +1,6 @@
+// Controller: ExamsController
+// Purpose: Handles CRUD operations for exams and mapping/managing subjects assigned to an exam.
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Data;

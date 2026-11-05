@@ -1,3 +1,6 @@
+// Controller: EnrollmentController
+// Purpose: Handles student exam enrollments, fetching enrolled students, and finding available students for an exam.
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Data;

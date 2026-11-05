@@ -1,3 +1,8 @@
+/**
+ * Page: Students Management
+ * Purpose: Handles CRUD operations for students (add, view, edit, delete, search, and department filtering).
+ */
+
 import React, { useState, useEffect } from "react";
 import {
   getStudents,

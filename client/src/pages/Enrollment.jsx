@@ -1,3 +1,8 @@
+/**
+ * Page: Exam Enrollment
+ * Purpose: Allows enrolling students into selected exams and viewing currently enrolled students.
+ */
+
 import React, { useState, useEffect } from "react";
 import { getExams } from "../api/exams";
 import {

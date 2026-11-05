@@ -1,3 +1,6 @@
+// DTOs: Marks Data Transfer Objects
+// Purpose: Defines request/response models for marks entry grid items and bulk marks submission.
+
 using System.ComponentModel.DataAnnotations;
 
 namespace server.DTOs;

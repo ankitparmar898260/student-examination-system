@@ -1,3 +1,8 @@
+/**
+ * Report: Exam Subjects List
+ * Purpose: Displays the list of subjects mapped to an exam along with their maximum and passing marks.
+ */
+
 import React, { useState, useEffect } from "react";
 import { getExams } from "../../api/exams";
 import { getExamSubjectsReport } from "../../api/reports";
