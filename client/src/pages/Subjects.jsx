@@ -354,7 +354,7 @@ export default function Subjects() {
         isOpen={Boolean(confirmDeleteId)}
         onCancel={() => setConfirmDeleteId(null)}
         onConfirm={handleDeleteConfirm}
-        message="Are you sure you want to delete this subject? Exams and marks dependent on this subject will be affected."
+        message="Deleting this subject will also remove it from all exams and delete all marks entered for it. Do you want to continue?"
         confirmLabel="Delete Subject"
       />
     </div>

@@ -327,7 +327,7 @@ export default function Students() {
         isOpen={Boolean(confirmDeleteId)}
         onCancel={() => setConfirmDeleteId(null)}
         onConfirm={handleDeleteConfirm}
-        message="Are you sure you want to delete this student record? This action will permanently remove this candidate."
+        message="Deleting this student will also delete all their enrollments and marks. Do you want to continue?"
         confirmLabel="Delete Student"
       />
     </div>

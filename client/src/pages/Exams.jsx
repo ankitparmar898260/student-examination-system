@@ -59,6 +59,7 @@ export default function Exams() {
       subjectIds: [],
     });
     setErrors({});
+    setAlert(null);
     setEditingExam(null);
   };
 
@@ -257,6 +258,13 @@ export default function Exams() {
         size="md"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
+          {alert && (
+            <AlertMessage
+              type={alert.type}
+              message={alert.message}
+              onClose={() => setAlert(null)}
+            />
+          )}
           <FormInput
             label="Exam Name"
             name="examName"

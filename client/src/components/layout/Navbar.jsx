@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { Calendar, ShieldCheck, ChevronRight } from "lucide-react";
+import { Calendar, ChevronRight } from "lucide-react";
 
 export default function Navbar() {
   const location = useLocation();
@@ -54,11 +54,8 @@ export default function Navbar() {
           <Calendar className="w-3.5 h-3.5 text-blue-600" />
           <span>Academic Session 2025–26</span>
         </div>
-        <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 font-medium border border-emerald-200 text-xs">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-          <span>System Verified</span>
-        </div>
       </div>
     </header>
   );
 }
+

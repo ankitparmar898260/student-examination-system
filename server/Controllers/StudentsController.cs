@@ -22,6 +22,7 @@ public class StudentsController : ControllerBase
     public async Task<ActionResult<IEnumerable<StudentDto>>> GetStudents()
     {
         var students = await _context.Students
+            .AsNoTracking()
             .OrderBy(s => s.RollNumber)
             .Select(s => new StudentDto
             {

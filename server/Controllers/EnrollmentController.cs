@@ -25,6 +25,7 @@ public class EnrollmentController : ControllerBase
             return BadRequest(new { message = "Valid ExamId is required." });
 
         var enrolled = await _context.StudentExamEnrollments
+            .AsNoTracking()
             .Where(e => e.ExamId == examId)
             .Include(e => e.Student)
             .OrderBy(e => e.Student!.RollNumber)
@@ -51,12 +52,14 @@ public class EnrollmentController : ControllerBase
 
         // Get student IDs already enrolled in this exam
         var enrolledStudentIds = await _context.StudentExamEnrollments
+            .AsNoTracking()
             .Where(e => e.ExamId == examId)
             .Select(e => e.StudentId)
             .ToListAsync();
 
         // Get students not yet enrolled
         var available = await _context.Students
+            .AsNoTracking()
             .Where(s => !enrolledStudentIds.Contains(s.StudentId))
             .OrderBy(s => s.RollNumber)
             .Select(s => new AvailableStudentDto

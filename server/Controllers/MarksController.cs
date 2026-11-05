@@ -28,6 +28,7 @@ public class MarksController : ControllerBase
 
         // Verify subject belongs to the exam
         var isSubjectInExam = await _context.ExamSubjects
+            .AsNoTracking()
             .AnyAsync(es => es.ExamId == examId && es.SubjectId == subjectId);
 
         if (!isSubjectInExam)
@@ -37,6 +38,7 @@ public class MarksController : ControllerBase
 
         // Get all enrolled students for this exam
         var enrollments = await _context.StudentExamEnrollments
+            .AsNoTracking()
             .Where(e => e.ExamId == examId)
             .Include(e => e.Student)
             .OrderBy(e => e.Student!.RollNumber)
@@ -44,6 +46,7 @@ public class MarksController : ControllerBase
 
         // Get existing marks for this subject
         var existingMarks = await _context.StudentMarks
+            .AsNoTracking()
             .Where(sm => sm.SubjectId == subjectId && enrollments.Select(e => e.EnrollmentId).Contains(sm.EnrollmentId))
             .ToDictionaryAsync(sm => sm.EnrollmentId, sm => sm.MarksObtained);
 
@@ -65,6 +68,16 @@ public class MarksController : ControllerBase
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
+
+        if (dto.Marks == null || dto.Marks.Count == 0)
+        {
+            return BadRequest(new { message = "Marks entry list cannot be empty." });
+        }
+
+        if (dto.Marks.Select(m => m.EnrollmentId).Distinct().Count() != dto.Marks.Count)
+        {
+            return BadRequest(new { message = "Duplicate students found in marks entry." });
+        }
 
         // 1. Verify subject belongs to the exam
         var isSubjectInExam = await _context.ExamSubjects
@@ -127,4 +140,3 @@ public class MarksController : ControllerBase
         return Ok(new { message = "All marks saved successfully." });
     }
 }
-

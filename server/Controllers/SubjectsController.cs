@@ -22,6 +22,7 @@ public class SubjectsController : ControllerBase
     public async Task<ActionResult<IEnumerable<SubjectDto>>> GetSubjects()
     {
         var subjects = await _context.Subjects
+            .AsNoTracking()
             .OrderBy(s => s.SubjectCode)
             .Select(s => new SubjectDto
             {

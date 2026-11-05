@@ -26,7 +26,7 @@ public class ReportsController : ControllerBase
         [FromQuery] string? department,
         [FromQuery] string? search)
     {
-        var query = _context.Students.AsQueryable();
+        var query = _context.Students.AsNoTracking().AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(department) && department != "All")
         {
@@ -61,6 +61,7 @@ public class ReportsController : ControllerBase
     public async Task<ActionResult<IEnumerable<string>>> GetDepartments()
     {
         var departments = await _context.Students
+            .AsNoTracking()
             .Select(s => s.Department)
             .Distinct()
             .OrderBy(d => d)
@@ -78,6 +79,7 @@ public class ReportsController : ControllerBase
             return BadRequest(new { message = "Valid ExamId is required." });
 
         var subjects = await _context.ExamSubjects
+            .AsNoTracking()
             .Where(es => es.ExamId == examId)
             .Include(es => es.Subject)
             .OrderBy(es => es.Subject!.SubjectCode)
@@ -103,6 +105,7 @@ public class ReportsController : ControllerBase
             return BadRequest(new { message = "Valid ExamId is required." });
 
         var list = await _context.StudentExamEnrollments
+            .AsNoTracking()
             .Where(e => e.ExamId == examId)
             .Include(e => e.Student)
             .OrderBy(e => e.Student!.RollNumber)
@@ -129,11 +132,15 @@ public class ReportsController : ControllerBase
         if (examId <= 0 || studentId <= 0)
             return BadRequest(new { message = "Valid ExamId and StudentId are required." });
 
-        var exam = await _context.Exams.FindAsync(examId);
+        var exam = await _context.Exams
+            .AsNoTracking()
+            .FirstOrDefaultAsync(e => e.ExamId == examId);
+
         if (exam == null)
             return NotFound(new { message = "Exam not found." });
 
         var enrollment = await _context.StudentExamEnrollments
+            .AsNoTracking()
             .Include(e => e.Student)
             .FirstOrDefaultAsync(e => e.ExamId == examId && e.StudentId == studentId);
 
@@ -142,6 +149,7 @@ public class ReportsController : ControllerBase
 
         // Get all subjects assigned to this exam
         var examSubjects = await _context.ExamSubjects
+            .AsNoTracking()
             .Where(es => es.ExamId == examId)
             .Include(es => es.Subject)
             .OrderBy(es => es.Subject!.SubjectCode)
@@ -150,6 +158,7 @@ public class ReportsController : ControllerBase
 
         // Get marks entered for this student in this enrollment
         var marksDict = await _context.StudentMarks
+            .AsNoTracking()
             .Where(sm => sm.EnrollmentId == enrollment.EnrollmentId)
             .ToDictionaryAsync(sm => sm.SubjectId, sm => sm.MarksObtained);
 
@@ -282,22 +291,27 @@ public class ReportsController : ControllerBase
 
         // Get all subjects of this exam
         var examSubjects = await _context.ExamSubjects
+            .AsNoTracking()
             .Where(es => es.ExamId == examId)
             .Include(es => es.Subject)
             .ToListAsync();
 
         var enrollments = await _context.StudentExamEnrollments
+            .AsNoTracking()
             .Where(e => e.ExamId == examId)
             .Select(e => e.EnrollmentId)
+            .ToListAsync();
+
+        var allMarks = await _context.StudentMarks
+            .AsNoTracking()
+            .Where(sm => enrollments.Contains(sm.EnrollmentId))
             .ToListAsync();
 
         var report = new List<SubjectWiseReportDto>();
 
         foreach (var es in examSubjects)
         {
-            var marks = await _context.StudentMarks
-                .Where(sm => sm.SubjectId == es.SubjectId && enrollments.Contains(sm.EnrollmentId))
-                .ToListAsync();
+            var marks = allMarks.Where(sm => sm.SubjectId == es.SubjectId).ToList();
 
             decimal highest = marks.Any() ? marks.Max(m => m.MarksObtained) : 0;
             decimal average = marks.Any() ? Math.Round(marks.Average(m => m.MarksObtained), 2) : 0;
@@ -328,17 +342,20 @@ public class ReportsController : ControllerBase
             return BadRequest(new { message = "Valid ExamId is required." });
 
         var examSubjects = await _context.ExamSubjects
+            .AsNoTracking()
             .Where(es => es.ExamId == examId)
             .Include(es => es.Subject)
             .ToListAsync();
 
         var enrollments = await _context.StudentExamEnrollments
+            .AsNoTracking()
             .Where(e => e.ExamId == examId)
             .Include(e => e.Student)
             .ToListAsync();
 
         var enrollmentIds = enrollments.Select(e => e.EnrollmentId).ToList();
         var existingMarks = await _context.StudentMarks
+            .AsNoTracking()
             .Where(sm => enrollmentIds.Contains(sm.EnrollmentId))
             .ToListAsync();
 
@@ -371,6 +388,7 @@ public class ReportsController : ControllerBase
     private async Task<List<ExamResultItemDto>> BuildExamResultsAsync(int examId)
     {
         var examSubjects = await _context.ExamSubjects
+            .AsNoTracking()
             .Where(es => es.ExamId == examId)
             .Include(es => es.Subject)
             .Select(es => es.Subject!)
@@ -379,12 +397,14 @@ public class ReportsController : ControllerBase
         int totalMaxMarks = examSubjects.Sum(s => s.MaxMarks);
 
         var enrollments = await _context.StudentExamEnrollments
+            .AsNoTracking()
             .Where(e => e.ExamId == examId)
             .Include(e => e.Student)
             .ToListAsync();
 
         var enrollmentIds = enrollments.Select(e => e.EnrollmentId).ToList();
         var allMarks = await _context.StudentMarks
+            .AsNoTracking()
             .Where(sm => enrollmentIds.Contains(sm.EnrollmentId))
             .ToListAsync();
 
@@ -455,16 +475,23 @@ public class ReportsController : ControllerBase
         }
 
         // Rank Calculation:
-        // Rank 1, 2, 3... based on TotalObtained DESC (only for Pass students, or ordered list)
+        // Standard competition ranking (1, 1, 3):
+        // Only students with OverallResult == "Pass" receive a rank.
         var passedStudents = items
             .Where(i => i.OverallResult == "Pass" && i.TotalObtained.HasValue)
             .OrderByDescending(i => i.TotalObtained!.Value)
             .ToList();
 
-        int currentRank = 1;
-        foreach (var p in passedStudents)
+        for (int i = 0; i < passedStudents.Count; i++)
         {
-            p.Rank = currentRank++;
+            if (i > 0 && passedStudents[i].TotalObtained!.Value == passedStudents[i - 1].TotalObtained!.Value)
+            {
+                passedStudents[i].Rank = passedStudents[i - 1].Rank;
+            }
+            else
+            {
+                passedStudents[i].Rank = i + 1;
+            }
         }
 
         // Return ordered: Passed with rank first (by Rank ASC), then Fail, then Incomplete

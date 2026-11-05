@@ -22,6 +22,7 @@ public class ExamsController : ControllerBase
     public async Task<ActionResult<IEnumerable<ExamListDto>>> GetExams()
     {
         var exams = await _context.Exams
+            .AsNoTracking()
             .Include(e => e.ExamSubjects)
             .OrderByDescending(e => e.ExamId)
             .Select(e => new ExamListDto
@@ -41,6 +42,7 @@ public class ExamsController : ControllerBase
     public async Task<ActionResult<ExamDetailDto>> GetExam(int id)
     {
         var exam = await _context.Exams
+            .AsNoTracking()
             .Include(e => e.ExamSubjects)
             .FirstOrDefaultAsync(e => e.ExamId == id);
 
@@ -63,6 +65,7 @@ public class ExamsController : ControllerBase
     public async Task<ActionResult<IEnumerable<SubjectDto>>> GetExamSubjects(int id)
     {
         var subjects = await _context.ExamSubjects
+            .AsNoTracking()
             .Where(es => es.ExamId == id)
             .Include(es => es.Subject)
             .Select(es => new SubjectDto
@@ -107,18 +110,16 @@ public class ExamsController : ControllerBase
             AcademicYear = dto.AcademicYear.Trim()
         };
 
-        _context.Exams.Add(exam);
-        await _context.SaveChangesAsync();
-
-        // Assign ExamSubjects
+        exam.ExamSubjects ??= new List<ExamSubject>();
         foreach (var subjectId in dto.SubjectIds.Distinct())
         {
-            _context.ExamSubjects.Add(new ExamSubject
+            exam.ExamSubjects.Add(new ExamSubject
             {
-                ExamId = exam.ExamId,
                 SubjectId = subjectId
             });
         }
+
+        _context.Exams.Add(exam);
         await _context.SaveChangesAsync();
 
         var resultDto = new ExamDetailDto
@@ -161,13 +162,38 @@ public class ExamsController : ControllerBase
             return BadRequest(new { message = "One or more selected subjects do not exist." });
         }
 
+        // Check if any removed subject already has marks entered for this exam
+        var currentSubjectIds = exam.ExamSubjects.Select(es => es.SubjectId).ToList();
+        var newSubjectIds = dto.SubjectIds.Distinct().ToList();
+        var removedSubjectIds = currentSubjectIds.Except(newSubjectIds).ToList();
+
+        if (removedSubjectIds.Count > 0)
+        {
+            var subjectsWithMarksIds = await _context.StudentMarks
+                .Where(sm => sm.Enrollment!.ExamId == id && removedSubjectIds.Contains(sm.SubjectId))
+                .Select(sm => sm.SubjectId)
+                .Distinct()
+                .ToListAsync();
+
+            if (subjectsWithMarksIds.Count > 0)
+            {
+                var subjectDetails = await _context.Subjects
+                    .Where(s => subjectsWithMarksIds.Contains(s.SubjectId))
+                    .Select(s => $"{s.SubjectName} ({s.SubjectCode})")
+                    .ToListAsync();
+
+                var subjectNames = subjectDetails.Count > 0 ? string.Join(", ", subjectDetails) : string.Join(", ", subjectsWithMarksIds);
+                return BadRequest(new { message = $"Cannot remove subject(s) that already have marks entered for this exam: {subjectNames}." });
+            }
+        }
+
         exam.ExamName = dto.ExamName.Trim();
         exam.AcademicYear = dto.AcademicYear.Trim();
 
         // Remove old mappings and add new mappings
         _context.ExamSubjects.RemoveRange(exam.ExamSubjects);
 
-        foreach (var subjectId in dto.SubjectIds.Distinct())
+        foreach (var subjectId in newSubjectIds)
         {
             _context.ExamSubjects.Add(new ExamSubject
             {
@@ -180,4 +206,3 @@ public class ExamsController : ControllerBase
         return Ok(new { message = "Exam updated successfully." });
     }
 }
-
