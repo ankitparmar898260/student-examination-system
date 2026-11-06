@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { useEnrollmentDraft } from "../../context/EnrollmentDraftContext";
 import {
+  LayoutDashboard,
   GraduationCap,
   Users,
   BookOpen,
@@ -67,6 +68,19 @@ export default function Sidebar() {
 
       {/* Navigation Links */}
       <div className="flex-1 overflow-y-auto sidebar-scroll px-3.5 py-5 space-y-6">
+        {/* OVERVIEW Section */}
+        <div>
+          <h2 className="px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
+            OVERVIEW
+          </h2>
+          <nav className="space-y-1">
+            <NavLink to="/" end className={getNavLinkClass}>
+              <LayoutDashboard className="w-4 h-4 shrink-0" />
+              <span>Dashboard</span>
+            </NavLink>
+          </nav>
+        </div>
+
         {/* DATA ENTRY Section */}
         <div>
           <h2 className="px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">

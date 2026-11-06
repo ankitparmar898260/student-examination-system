@@ -2,6 +2,9 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 
+// Overview Dashboard
+import Dashboard from "./pages/Dashboard";
+
 // Data Entry Screens
 import Students from "./pages/Students";
 import Subjects from "./pages/Subjects";
@@ -23,8 +26,11 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
+          {/* Overview Dashboard */}
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+
           {/* Data Entry */}
-          <Route path="/" element={<Students />} />
           <Route path="/students" element={<Students />} />
           <Route path="/subjects" element={<Subjects />} />
           <Route path="/exams" element={<Exams />} />

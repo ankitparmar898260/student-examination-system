@@ -8,6 +8,8 @@ export default function Navbar() {
   const getPageInfo = (pathname) => {
     switch (pathname) {
       case "/":
+      case "/dashboard":
+        return { title: "Dashboard", section: "Overview" };
       case "/students":
         return { title: "Students", section: "Data Entry" };
       case "/subjects":
