@@ -2,11 +2,12 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+import DraftBar from "./DraftBar";
 
 export default function Layout() {
   return (
     <div className="flex h-screen bg-slate-200 overflow-hidden font-sans text-[#0F172A]">
-      {/* Sidebar (left, fixed width w-64) */}
+      {/* Sidebar (left, fixed width w-64 ~256px) */}
       <Sidebar />
 
       {/* Main Column */}
@@ -21,6 +22,9 @@ export default function Layout() {
           </div>
         </main>
       </div>
+
+      {/* Persistent Bottom Draft Notification Bar */}
+      <DraftBar />
     </div>
   );
 }

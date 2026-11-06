@@ -151,7 +151,7 @@ export default function SubjectWiseReport() {
       </div>
 
       {/* Filter Card */}
-      <div className="mb-5 bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center max-w-md">
+      <div className="mb-5 bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center max-w-xl">
         <FilterDropdown
           label="Examination"
           value={selectedExamId}

@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useEnrollmentDraft } from "../../context/EnrollmentDraftContext";
 import {
   GraduationCap,
   Users,
@@ -17,6 +18,9 @@ import {
 } from "lucide-react";
 
 export default function Sidebar() {
+  const { selectedIds } = useEnrollmentDraft();
+  const draftCount = selectedIds?.size || 0;
+
   const dataEntryLinks = [
     { to: "/students", label: "Students", icon: Users },
     { to: "/subjects", label: "Subjects", icon: BookOpen },
@@ -46,16 +50,16 @@ export default function Sidebar() {
     <aside className="w-64 bg-[#0F172A] border-r border-slate-800/80 flex flex-col h-screen sticky top-0 shrink-0 no-print">
       {/* Brand Header */}
       <div className="h-16 flex items-center px-5 border-b border-slate-800/80 bg-[#0B1120]">
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-xs">
+        <div className="flex items-center gap-3 min-w-0 w-full">
+          <div className="h-9 w-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-xs shrink-0">
             <GraduationCap className="w-5 h-5" />
           </div>
-          <div>
-            <h1 className="text-sm font-bold text-white tracking-tight leading-none">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-base font-bold text-white tracking-tight leading-tight truncate">
               ExamSystem
             </h1>
-            <p className="text-[11px] text-slate-400 mt-1 font-medium">
-              Academic SaaS Portal
+            <p className="text-xs text-slate-400 leading-tight truncate">
+              Student Examination
             </p>
           </div>
         </div>
@@ -71,10 +75,16 @@ export default function Sidebar() {
           <nav className="space-y-1">
             {dataEntryLinks.map((item) => {
               const Icon = item.icon;
+              const isEnrollment = item.to === "/enrollment";
               return (
                 <NavLink key={item.to} to={item.to} className={getNavLinkClass}>
                   <Icon className="w-4 h-4 shrink-0" />
-                  <span>{item.label}</span>
+                  <span className="flex-1">{item.label}</span>
+                  {isEnrollment && draftCount > 0 && (
+                    <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-blue-500 text-white leading-none shadow-xs">
+                      {draftCount}
+                    </span>
+                  )}
                 </NavLink>
               );
             })}

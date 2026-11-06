@@ -1,3 +1,7 @@
+// Data: AppDbContext (Entity Framework Core Database Context)
+// Purpose: Manages database connection, registers DbSets (tables), and configures entity relationships & constraints.
+
+
 using Microsoft.EntityFrameworkCore;
 using server.Models;
 
